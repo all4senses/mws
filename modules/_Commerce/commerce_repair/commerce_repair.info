@@ -1,0 +1,12 @@
+name = Commerce Repair
+description = Repair missing fields in Commerce modules
+package = Commerce (contrib)
+dependencies[] = commerce
+core = 7.x
+
+; Information added by drupal.org packaging script on 2011-09-09
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "commerce_repair"
+datestamp = "1315569861"
+
