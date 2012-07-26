@@ -35,9 +35,12 @@ function theme_fb_markup($params) {
 }
 
 function theme_fb_login_button($params) {
+  if (!is_array($params)) {
+    $params['text'] = $params;
+  }
   $text = isset($params['text']) ? $params['text'] : '';
   $options = isset($params['options']) ? $params['options'] : array();
-
+  
   // Facebook used to provide default text.  No longer, apparently.
   if (!$text) {
     $text = t('Connect');
