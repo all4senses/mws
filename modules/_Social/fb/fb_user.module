@@ -546,7 +546,7 @@ function fb_user_form_alter(&$form, &$form_state, $form_id) {
          ($form_id == 'user_login_block' && variable_get(FB_USER_VAR_ALTER_LOGIN_BLOCK, TRUE)))) {
 
       // Add a facebook connect button or profile pic to the form.
-      $fb_button = theme('fb_login_button', t(_fb_user_button_text($form_id)), array('form_id' => $form_id));
+      $fb_button = theme('fb_login_button', array('text' => t(_fb_user_button_text($form_id)), array('form_id' => $form_id)));
       $form['fb_user'] = array(
         '#fb_user' => NULL,
         'connected' => array(
