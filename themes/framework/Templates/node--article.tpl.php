@@ -45,7 +45,7 @@
     
     
   <?php print '<div>Test</div>'; 
-  
+  $url = 'http://mws.all4senses.com' . ($_SERVER['REQUEST_URI'] == '/home' ? '/' : $_SERVER['REQUEST_URI']);
   dpm($_SERVER);
   ?>
     
@@ -58,7 +58,7 @@
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>  
 
-<div class="fb-comments" data-href="http://mws.all4senses.com/" data-num-posts="2" data-width="470"></div>
+<div class="fb-comments" data-href="<?php echo $url; ?>" data-num-posts="2" data-width="470"></div>
 
 
 
