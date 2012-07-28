@@ -44,7 +44,10 @@
     
     
     
-  <?php print '<div>Test</div>'; ?>
+  <?php print '<div>Test</div>'; 
+  
+  dpm($_SERVER);
+  ?>
     
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
