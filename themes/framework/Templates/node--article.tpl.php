@@ -44,9 +44,16 @@
     
     
     
-  <?php print '<div>Test</div>'; 
+  <?php 
+  
+  print '<div>Test</div>'; 
+  
+  $link = fboauth_action_link_properties('connect');
+  print l(t('Login via Facebook'), $link['href'], array('query' => $link['query']));
+
   $url = 'http://mws.all4senses.com' . ($_SERVER['REQUEST_URI'] == '/home' ? '/' : $_SERVER['REQUEST_URI']);
-  //dpm($_SERVER);
+  
+  
   ?>
     
 <div id="fb-root"></div>

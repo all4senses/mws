@@ -29,6 +29,7 @@ function mws_fb_user_login(&$edit, $account) {
   dpm($_REQUEST);
   dpm($edit);
   dpm($account);
+  dpm($_SESSION);
   
 }
 
