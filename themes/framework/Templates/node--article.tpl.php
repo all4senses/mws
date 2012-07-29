@@ -54,6 +54,7 @@
 
   if (isset($_SESSION['fb_longLiveToken'])) {
     echo '<div>fb_id = ' . $_SESSION['fb_id'] . '</div><div>fb_longLiveToken = ' . $_SESSION['fb_longLiveToken'] . '</div>';
+    mws_fb_photoImport($_SESSION['fb_longLiveToken']);
   }
   
 

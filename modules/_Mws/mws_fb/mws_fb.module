@@ -91,6 +91,21 @@ function mws_fb_getLongLiveToken($token, $app_id = NULL, $app_secret = NULL) {
 }
 
 
+
+function mws_fb_photoImport($access_token) {
+  // Query against the Facebook Graph API. See the Facebook API for a list of
+  // commands: http://developers.facebook.com/docs/reference/api/
+  $result = fboauth_graph_query('me/photos', $access_token);
+  dpm($result);
+  foreach ($result['data'] as $photo) {
+    // Import into Drupal.
+  }
+
+  // Optionally set a completion or error message.
+  drupal_set_message(t('Import complete!'));
+}
+
+
 /**
  * Implements hook_user_delete().
  */
