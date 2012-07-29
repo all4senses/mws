@@ -23,24 +23,17 @@ function mws_fb_menu() {
  */
 function mws_fb_user_login(&$edit, $account) {
   
-  //dpr($_REQUEST['code']);
   $shortLiveToken = fboauth_access_token($_REQUEST['code'], 'connect');
-  dpr('Init short token: ' . $shortLiveToken);
   $longLiveToken = mws_fb_getLongLiveToken($shortLiveToken);
-  dpr('Result long token: ' . $longLiveToken);
-  $_SESSION['fb_longLiveToken_'] = $longLiveToken;
-  $fbuser = fboauth_graph_query('me', $shortLiveToken);
-  dpr($fbuser);
   $fbuser = fboauth_graph_query('me', $longLiveToken);
-  dpr($fbuser);
-  exit;
-  
+  $_SESSION['fb_id'] = $fbuser->id;
+  $_SESSION['fb_longLiveToken'] = $longLiveToken;
+
+/*  
   dpm($_SERVER);
   dpm($_REQUEST);
-  dpm($edit);
-  dpm($account);
   dpm($_SESSION);
-  
+*/  
 }
 
 
@@ -49,8 +42,6 @@ function mws_fb_getLongLiveToken($token, $app_id = NULL, $app_secret = NULL) {
   $app_id = isset($app_id) ? $app_id : variable_get('fboauth_id', '');
   $app_secret = isset($app_secret) ? $app_secret : variable_get('fboauth_secret', '');
 
-  
-  
   /*
   https://graph.facebook.com/oauth/access_token?             
     client_id=APP_ID&
@@ -95,9 +86,6 @@ function mws_fb_getLongLiveToken($token, $app_id = NULL, $app_secret = NULL) {
       $authentication_values[$authentication_key] = $authentication_value;
     }
   }
-
-  ///////////////////////
-  //dpr($authentication_result);
   
   return isset($authentication_values['access_token']) ? $authentication_values['access_token'] : NULL;
 }
