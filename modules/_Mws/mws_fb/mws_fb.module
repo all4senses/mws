@@ -23,10 +23,16 @@ function mws_fb_menu() {
  */
 function mws_fb_user_login(&$edit, $account) {
   
-  dpr($_REQUEST['code']);
-  $access_token = fboauth_access_token($_REQUEST['code'], 'connect');
-  dpr('Init token: ' . $access_token);
-  mws_fb_getLongLiveToken($access_token);
+  //dpr($_REQUEST['code']);
+  $shortLiveToken = fboauth_access_token($_REQUEST['code'], 'connect');
+  dpr('Init short token: ' . $shortLiveToken);
+  $longLiveToken = mws_fb_getLongLiveToken($shortLiveToken);
+  dpr('Result long token: ' . $longLiveToken);
+  $_SESSION['fb_longLiveToken_'] = $longLiveToken;
+  $fbuser = fboauth_graph_query('me', $shortLiveToken);
+  dpr($fbuser);
+  $fbuser = fboauth_graph_query('me', $longLiveToken);
+  dpr($fbuser);
   exit;
   
   dpm($_SERVER);
@@ -90,10 +96,8 @@ function mws_fb_getLongLiveToken($token, $app_id = NULL, $app_secret = NULL) {
     }
   }
 
-  
-  dpr($authentication_result);
-  dpr('Result token: ' . $authentication_values['access_token']);
-  exit;
+  ///////////////////////
+  //dpr($authentication_result);
   
   return isset($authentication_values['access_token']) ? $authentication_values['access_token'] : NULL;
 }
