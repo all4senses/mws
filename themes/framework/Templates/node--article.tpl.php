@@ -46,7 +46,7 @@
     
   <?php print '<div>Test</div>'; 
   $url = 'http://mws.all4senses.com' . ($_SERVER['REQUEST_URI'] == '/home' ? '/' : $_SERVER['REQUEST_URI']);
-  dpm($_SERVER);
+  //dpm($_SERVER);
   ?>
     
 <div id="fb-root"></div>

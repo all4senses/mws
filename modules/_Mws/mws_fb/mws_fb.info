@@ -1,0 +1,7 @@
+name = Mws to Facebook
+description = Facebook related functions and hooks.
+core = 7.x
+
+version = "7.x-1.5"
+core = "7.x"
+project = "Mws"

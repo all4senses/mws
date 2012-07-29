@@ -1,0 +1,103 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function mws_fb_menu() {
+  /*
+  $items['mws_fb/%mws_fb_action'] = array(
+    'title' => 'Facebook connect',
+    'page callback' => 'mws_fb_action_page',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'file' => 'includes/mws_fb.mws_fb.inc',
+    'type' => MENU_CALLBACK,
+  );
+  
+  return $items;
+  */
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function mws_fb_user_login(&$edit, $account) {
+  
+  $args = arg();
+  dpm($args);
+  dpm($_GET);
+  dpm($_REQUEST);
+  dpm($edit);
+  dpm($account);
+  
+}
+
+/**
+ * Implements hook_user_delete().
+ */
+function mws_fb_user_delete($account) {
+
+  // Delete fb related data of this module.
+}
+
+/**
+ * Implements hook_user_cancel().
+ */
+function mws_fb_user_cancel($edit, $account, $method) {
+  mws_fb_user_delete($account);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function mws_fb_form_user_profile_form_alter(&$form, &$form_state) {
+  /*
+  $uid = $form['#user']->uid;
+  $fbid = mws_fb_fbid_load($uid);
+
+  $mws_fb_form = array(
+    '#type' => 'item',
+    '#title' => t('Facebook connect'),
+    '#markup' => theme('mws_fb_user_form_connect', array('uid' => $uid, 'fbid' => $fbid)),
+  );
+
+  // Inject the Facebook options after the e-mail settings. No weights are on
+  // these elements by default, so we have to put it in order.
+  $temp_form = array();
+  foreach (element_children($account_form) as $child) {
+    $temp_form[$child] = $account_form[$child];
+    if ($child == 'mail') {
+      if (isset($temp_form[$child]['#weight'])) {
+        $mws_fb_form['#weight'] = $temp_form[$child]['#weight'];
+      }
+      $temp_form['mws_fb'] = $mws_fb_form;
+    }
+    unset($account_form[$child]);
+  }
+
+  $account_form += $temp_form;
+  if (isset($form['account'])) {
+    $form['account'] = $account_form;
+  }
+  else {
+    $form = $account_form;
+  }
+  */
+}
+
+/**
+ * Implements hook_mws_fb_actions().
+ */
+function mws_fb_mws_fb_actions() {
+  /*
+  $actions = array();
+
+  $actions['connect'] = array(
+    'title' => t('Connect'),
+    'file' => 'includes/mws_fb.mws_fb.inc',
+    'callback' => 'mws_fb_action_connect',
+    'permissions' => array_keys(mws_fb_user_connect_permissions()),
+  );
+  return $actions;
+  */
+}
