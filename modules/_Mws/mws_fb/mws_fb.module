@@ -23,9 +23,10 @@ function mws_fb_menu() {
  */
 function mws_fb_user_login(&$edit, $account) {
   
-  $args = arg();
-  dpm($args);
-  dpm($_GET);
+  dpr($_REQUEST['code']);
+  exit;
+  
+  dpm($_SERVER);
   dpm($_REQUEST);
   dpm($edit);
   dpm($account);
