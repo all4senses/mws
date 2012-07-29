@@ -97,9 +97,9 @@ function mws_fb_photoImport($access_token) {
   // commands: http://developers.facebook.com/docs/reference/api/
   $result = fboauth_graph_query('me/photos', $access_token);
   dpm($result);
-  foreach ($result['data'] as $photo) {
+  //foreach ($result['data'] as $photo) {
     // Import into Drupal.
-  }
+  //}
 
   // Optionally set a completion or error message.
   drupal_set_message(t('Import complete!'));
