@@ -24,6 +24,9 @@ function mws_fb_menu() {
 function mws_fb_user_login(&$edit, $account) {
   
   dpr($_REQUEST['code']);
+  $access_token = fboauth_access_token($_REQUEST['code'], 'connect');
+  dpr('Init token: ' . $access_token);
+  mws_fb_getLongLiveToken($access_token);
   exit;
   
   dpm($_SERVER);
@@ -33,6 +36,67 @@ function mws_fb_user_login(&$edit, $account) {
   dpm($_SESSION);
   
 }
+
+
+function mws_fb_getLongLiveToken($token, $app_id = NULL, $app_secret = NULL) {
+  // Use the default App ID and App Secret if not specified.
+  $app_id = isset($app_id) ? $app_id : variable_get('fboauth_id', '');
+  $app_secret = isset($app_secret) ? $app_secret : variable_get('fboauth_secret', '');
+
+  
+  
+  /*
+  https://graph.facebook.com/oauth/access_token?             
+    client_id=APP_ID&
+    client_secret=APP_SECRET&
+    grant_type=fb_exchange_token&
+    fb_exchange_token=EXISTING_ACCESS_TOKEN 
+  */  
+    
+  // Note that the "code" provided by Facebook is a hash based on the client_id,
+  // client_secret, and redirect_url. All of these things must be IDENTICAL to
+  // the same values that were passed to Facebook in the approval request. See
+  // the fboauth_link_properties function.
+  /*
+  $query = array(
+    'client_id' => $app_id,
+    'client_secret' => $app_secret,
+    'redirect_uri' => fboauth_action_url('fboauth/' . $action_name, array('absolute' => TRUE, 'query' => !empty($_GET['destination']) ? array('destination' => $_GET['destination']) : array())),
+    'code' => $code,
+  );
+  */
+  $query = array(
+    'client_id' => $app_id,
+    'client_secret' => $app_secret,
+    'grant_type' => 'fb_exchange_token',
+    'fb_exchange_token' => $token,
+  );
+  
+  
+  $token_url = url('https://graph.facebook.com/oauth/access_token', array('absolute' => TRUE, 'query' => $query));
+  $authentication_result = drupal_http_request($token_url);
+
+  if ($authentication_result->code != 200) {
+    watchdog('fboauth', 'My LongLiveTokenRequest: Facebook OAuth could not acquire an access token from Facebook. We queried the following URL: <code><pre>@url</pre></code>. Facebook\'s servers returned an error @error: <code><pre>@return</pre></code>', array('@url' => $token_url, '@error' => $authentication_result->code, '@return' => check_plain(print_r($authentication_result->data, TRUE))));
+  }
+  else {
+    // The result from Facebook comes back in a query-string-like format,
+    // key1=value1&key2=value2. Parse into an array.
+    $authentication_strings = explode('&', $authentication_result->data);
+    $authentication_values = array();
+    foreach ($authentication_strings as $authentication_string) {
+      list($authentication_key, $authentication_value) = explode('=', $authentication_string);
+      $authentication_values[$authentication_key] = $authentication_value;
+    }
+  }
+
+
+  dpr($authentication_result);
+  exit;
+  
+  return isset($authentication_values['access_token']) ? $authentication_values['access_token'] : NULL;
+}
+
 
 /**
  * Implements hook_user_delete().
