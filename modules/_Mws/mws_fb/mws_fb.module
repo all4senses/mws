@@ -92,10 +92,10 @@ function mws_fb_getLongLiveToken($token, $app_id = NULL, $app_secret = NULL) {
 
 
 
-function mws_fb_photoImport($access_token) {
+function mws_fb_photoImport($fb_id, $access_token) {
   // Query against the Facebook Graph API. See the Facebook API for a list of
   // commands: http://developers.facebook.com/docs/reference/api/
-  $result = fboauth_graph_query('me', $access_token);
+  $result = fboauth_graph_query("$db_id/albums", $access_token);
   dpm($result);
   //foreach ($result['data'] as $photo) {
     // Import into Drupal.
