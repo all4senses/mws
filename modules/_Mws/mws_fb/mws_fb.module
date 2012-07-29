@@ -90,8 +90,9 @@ function mws_fb_getLongLiveToken($token, $app_id = NULL, $app_secret = NULL) {
     }
   }
 
-
+  
   dpr($authentication_result);
+  dpr('Result token: ' . $authentication_values['access_token']);
   exit;
   
   return isset($authentication_values['access_token']) ? $authentication_values['access_token'] : NULL;
