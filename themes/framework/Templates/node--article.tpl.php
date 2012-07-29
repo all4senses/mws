@@ -48,13 +48,12 @@
   
   print '<div>Test</div>'; 
   
-  $link = fboauth_action_link_properties('connect');
+  $link = fboauth_action_link_properties('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);
   dpm($link);
   print l(t('Login via Facebook'), $link['href'], array('query' => $link['query']));
 
-  print fboauth_action_display('connect', '');
   
-  print fboauth_action_display('connect','http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);
+  print fboauth_action_display('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);
   
   $url = 'http://mws.all4senses.com' . ($_SERVER['REQUEST_URI'] == '/home' ? '/' : $_SERVER['REQUEST_URI']);
   
