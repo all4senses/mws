@@ -141,7 +141,7 @@ function mws_fb_node_update($node) {
     $params = array(
         'caption' => 'It could be a joke :)',
         'name' => $node->title,
-        'link' => url('node/' . $node->nid),
+        'link' => url('node/' . $node->nid, array('absolute' => TRUE)),
         'message' => $node->body['und'][0]['value'],
         'description' => 'My new post on mws.all4senses.com...',
         'actions' => '{"name": "' . 'My profile at mws.all4senses.com' . '", "link": "' . url('user/' . $node->uid, array('absolute' => TRUE)) . '"}',
