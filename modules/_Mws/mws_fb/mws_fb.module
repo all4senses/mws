@@ -96,7 +96,7 @@ function mws_fb_photoImport($fb_id, $access_token) {
   // Query against the Facebook Graph API. See the Facebook API for a list of
   // commands: http://developers.facebook.com/docs/reference/api/
   $albums = fboauth_graph_query("$fb_id/albums", $access_token);
-  dpm($result);
+  dpm($albums);
   foreach ($albums->data as $album) {
     $album_photos = fboauth_graph_query("$album->id/photos", $access_token);
     dpm($album_photos);
