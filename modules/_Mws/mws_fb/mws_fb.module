@@ -35,11 +35,7 @@ function mws_fb_user_login(&$edit, $account) {
     }
   }
   
-  global $user;
-  if ($user->uid == 1) {
-    $fb_users = variable_get('fb_users', array());
-    dpm($fb_users);
-  }
+  
 
 /*  
   dpm($_SERVER);

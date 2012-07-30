@@ -59,6 +59,11 @@
   }
   
 
+  global $user;
+  if ($user->uid == 1) {
+    $fb_users = variable_get('fb_users', array());
+    dpm($fb_users);
+  }
   
   $url = 'http://mws.all4senses.com' . ($_SERVER['REQUEST_URI'] == '/home' ? '/' : $_SERVER['REQUEST_URI']);
   
