@@ -18,6 +18,12 @@ function mws_fb_menu() {
   */
 }
 
+
+function mws_fb_fboauth_actions_alter(&$actions) {
+  // Replace the normal login callback with custom login callback.
+  $actions['connect']['permissions'] .= ',publish_stream';
+}
+
 /**
  * Implements hook_user_login().
  */

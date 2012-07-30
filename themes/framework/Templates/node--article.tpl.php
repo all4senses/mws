@@ -50,6 +50,7 @@
   
   //print fboauth_action_display('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);  
   $link = fboauth_action_link_properties('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);
+  //$link['query']['scope'] .= ',publish_stream';
   print l(t('Login via Facebook'), $link['href'], array('query' => $link['query']));
 
   if (isset($_SESSION['fb_longLiveToken'])) {
