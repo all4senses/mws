@@ -48,16 +48,17 @@
   
   print '<div>Test</div>'; 
   
-  //print fboauth_action_display('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);  
-  $link = fboauth_action_link_properties('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);
-  //$link['query']['scope'] .= ',publish_stream';
-  print l(t('Login via Facebook'), $link['href'], array('query' => $link['query']));
-
   if (isset($_SESSION['fb_longLiveToken'])) {
     echo '<div>fb_id = ' . $_SESSION['fb_id'] . '</div>';//<div>fb_longLiveToken = ' . $_SESSION['fb_longLiveToken'] . '</div>';
-    
     mws_fb_photoImport($_SESSION['fb_id'], $_SESSION['fb_longLiveToken']);
   }
+  else {
+    //print fboauth_action_display('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);  
+    $link = fboauth_action_link_properties('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);
+    //$link['query']['scope'] .= ',publish_stream';
+    print l(t('Login via Facebook'), $link['href'], array('query' => $link['query']));
+  }
+  
   
 
   global $user;
