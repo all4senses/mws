@@ -106,7 +106,7 @@ function mws_fb_getLongLiveToken($token, $app_id = NULL, $app_secret = NULL) {
 
 
 
-function mws_fb_getTokenPermissions($access_token) {
+function mws_fb_getTokenPermissions($fb_id, $access_token) {
   module_load_include('inc', 'fboauth', 'includes/fboauth.fboauth');
   return fboauth_graph_query("$fb_id/permissions", $access_token);
 }
