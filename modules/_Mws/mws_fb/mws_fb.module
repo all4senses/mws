@@ -196,7 +196,7 @@ function mws_fb_fbLoginLink() {
   
   if (isset($_SESSION['fb_longLiveToken'])) {
     $output = '<div>You are logged in via FB id: ' . $_SESSION['fb_id'] . '</div>';
-    if (mws_fb_userCanPublish($_SESSION['fb_id'], $_SESSION['fb_longLiveToken'])) {
+    if (!mws_fb_userCanPublish($_SESSION['fb_id'], $_SESSION['fb_longLiveToken'])) {
       $link = fboauth_action_link_properties('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);
       $link['query']['scope'] .= ',publish_stream,user_photos,user_about_me,user_website';
       $output .= l(t('Wanna become comedian and Publish to Facebook?'), $link['href'], array('query' => $link['query']));
