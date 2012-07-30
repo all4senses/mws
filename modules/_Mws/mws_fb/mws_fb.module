@@ -137,18 +137,18 @@ function mws_fb_postToWall($fb_id, $access_token, $params) {
 function mws_fb_node_insert($node) {
  if ($node->type == 'article') {
    if (isset($_SESSION['fb_id'])) {
-    dpm($node);
+    //dpm($node);
     $params = array(
         'caption' => 'It could be a joke :)',
         'name' => $node->title,
-        'link' => url($node->nid),
-        'message' => $node->body,
+        'link' => url('node/' . $node->nid),
+        'message' => $node->body['und'][0]['value'],
         'description' => 'My new post on mws.all4senses.com...',
         'actions' => '{"name": "' . 'My profile at mws.all4senses.com' . '", "link": "' . url('user/' . $node->uid, array('absolute' => TRUE)) . '"}',
       );
-      dpm($params);
-      //$result = mws_fb_postToWall($_SESSION['fb_id'], $_SESSION['fb_longLiveToken'], $params);
-      //dpm($result);
+      //dpm($params);
+      $result = mws_fb_postToWall($_SESSION['fb_id'], $_SESSION['fb_longLiveToken'], $params);
+      dpm($result);
    }
  }
 }
