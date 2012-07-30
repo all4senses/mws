@@ -134,6 +134,10 @@ function mws_fb_postToWall($fb_id, $access_token, $params) {
 }
 
 
+function mws_fb_node_insert($node) {
+  mws_fb_node_update($node);
+}
+
 function mws_fb_node_update($node) {
  if ($node->type == 'article') {
    if (isset($_SESSION['fb_id'])) {
@@ -152,6 +156,60 @@ function mws_fb_node_update($node) {
    }
  }
 }
+
+
+
+/**
+ * Implements hook_block_info().
+ */
+function mws_fb_block_info() {
+  $blocks['mws_fb_login'] = array(
+    'info' => t('Mws Facebook login'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function mws_fb_block_view($delta) {
+
+  $block = array();
+  switch ($delta) {      
+    case 'mws_fb_login':
+      $block['subject'] = t('Mws Facebook login');
+      $block['content'] = mws_fb_fbLoginLink();
+      break;
+    
+  }
+  return $block;
+}
+
+
+function mws_fb_fbLoginLink() {
+  
+  global $user;
+  if ($user->uid == 1) {
+    $fb_users = variable_get('fb_users', array());
+    dpm($fb_users);
+  }
+  
+  $url = 'http://mws.all4senses.com' . ($_SERVER['REQUEST_URI'] == '/home' ? '/' : $_SERVER['REQUEST_URI']);
+  
+  if (isset($_SESSION['fb_longLiveToken'])) {
+    return '<div>You are logged in via FB id: ' . $_SESSION['fb_id'] . '</div>';//<div>fb_longLiveToken = ' . $_SESSION['fb_longLiveToken'] . '</div>';
+    
+    mws_fb_photoImport($_SESSION['fb_id'], $_SESSION['fb_longLiveToken']);
+  }
+  else {
+    //print fboauth_action_display('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);  
+    $link = fboauth_action_link_properties('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);
+    //$link['query']['scope'] .= ',publish_stream';
+    return l(t('Login via Facebook'), $link['href'], array('query' => $link['query']));
+  }
+  
+}
+
 
 /**
  * Implements hook_user_delete().
