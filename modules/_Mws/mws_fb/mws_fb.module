@@ -23,11 +23,13 @@ function mws_fb_menu() {
  */
 function mws_fb_user_login(&$edit, $account) {
   
-  $shortLiveToken = fboauth_access_token($_REQUEST['code'], 'connect');
-  $longLiveToken = mws_fb_getLongLiveToken($shortLiveToken);
-  $fbuser = fboauth_graph_query('me', $longLiveToken);
-  $_SESSION['fb_id'] = $fbuser->id;
-  $_SESSION['fb_longLiveToken'] = $longLiveToken;
+  if (isset($_REQUEST['code']) && $shortLiveToken = fboauth_access_token($_REQUEST['code'], 'connect')) {
+    if ($longLiveToken = mws_fb_getLongLiveToken($shortLiveToken)) {
+      $fbuser = fboauth_graph_query('me', $longLiveToken);
+      $_SESSION['fb_id'] = $fbuser->id;
+      $_SESSION['fb_longLiveToken'] = $longLiveToken;
+    }
+  }
 
 /*  
   dpm($_SERVER);
