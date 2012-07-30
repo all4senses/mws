@@ -134,7 +134,7 @@ function mws_fb_photoImport($fb_id, $access_token) {
       'link' => urlencode('http://mws.all4senses.com/article-1'),
       'message' => urlencode('description' . time()),
       'description' => urlencode('user_message' . time()),
-      'actions' => urlencode('{"name": "' . 'title123' . '", "link": "' . 'http://mws.all4senses.com' . '"}'),
+      //'actions' => urlencode('{"name": "' . 'title123' . '", "link": "' . 'http://mws.all4senses.com' . '"}'),
       'method' => 'post',
     );
 
