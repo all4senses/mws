@@ -98,11 +98,10 @@ function mws_fb_getLongLiveToken($token, $app_id = NULL, $app_secret = NULL) {
 
 
 
-function mws_fb_getTokenPermissions($fb_id, $access_token) {
+function mws_fb_userCanPublish($fb_id, $access_token) {
   module_load_include('inc', 'fboauth', 'includes/fboauth.fboauth');
-  
   $result = fboauth_graph_query("$fb_id/permissions", $access_token);
-  return $result->data[0];
+  return (isset($result->data[0]->publish_stream) && isset($result->data[0]->user_photos) && isset($result->data[0]->user_about_me) && isset($result->data[0]->user_website));
 }
 
 function mws_fb_photoImport($fb_id, $access_token) {
@@ -139,7 +138,7 @@ function mws_fb_node_insert($node) {
 
 function mws_fb_node_update($node) {
  if ($node->type == 'article') {
-   if (isset($_SESSION['fb_id'])) {
+   if (isset($_SESSION['fb_id']) && mws_fb_userCanPublish($_SESSION['fb_id'], $_SESSION['fb_longLiveToken'])) {
     //dpm($node);
     $params = array(
         'caption' => 'It could be a joke :)',
@@ -196,18 +195,16 @@ function mws_fb_fbLoginLink() {
   $url = 'http://mws.all4senses.com' . ($_SERVER['REQUEST_URI'] == '/home' ? '/' : $_SERVER['REQUEST_URI']);
   
   if (isset($_SESSION['fb_longLiveToken'])) {
-    $become_comedian_link = '';
-    $permissions = mws_fb_getTokenPermissions($_SESSION['fb_id'], $_SESSION['fb_longLiveToken']);
-    dpm($permissions);
-    if (!isset($permissions->publish_stream) || !isset($permissions->user_photos) || !isset($permissions->user_about_me) || !isset($permissions->user_website)) {
+    $output = '<div>You are logged in via FB id: ' . $_SESSION['fb_id'] . '</div>';
+    if (mws_fb_userCanPublish($_SESSION['fb_id'], $_SESSION['fb_longLiveToken'])) {
       $link = fboauth_action_link_properties('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);
       $link['query']['scope'] .= ',publish_stream,user_photos,user_about_me,user_website';
-      $become_comedian_link = l(t('Wanna become comedian and Publish to Facebook?'), $link['href'], array('query' => $link['query']));
+      $output .= l(t('Wanna become comedian and Publish to Facebook?'), $link['href'], array('query' => $link['query']));
     }
     
     mws_fb_photoImport($_SESSION['fb_id'], $_SESSION['fb_longLiveToken']);
     
-    return '<div>You are logged in via FB id: ' . $_SESSION['fb_id'] . '</div>' . $become_comedian_link;
+    return $output;
   }
   else {
     //print fboauth_action_display('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);  
