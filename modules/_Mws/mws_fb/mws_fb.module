@@ -150,7 +150,7 @@ function mws_fb_node_update($node) {
         'description' => 'My new post on mws.all4senses.com...',
         'actions' => '{"name": "' . 'My profile at mws.all4senses.com' . '", "link": "' . url('user/' . $node->uid, array('absolute' => TRUE)) . '"}',
       );
-      dpm($params);
+      //dpm($params);
       $result = mws_fb_postToWall($_SESSION['fb_id'], $_SESSION['fb_longLiveToken'], $params);
       dpm($result);
    }
