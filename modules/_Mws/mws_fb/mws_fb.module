@@ -119,6 +119,28 @@ function mws_fb_photoImport($fb_id, $access_token) {
 
   // Optionally set a completion or error message.
 //  drupal_set_message(t('Import complete!'));
+  
+  
+  
+  
+  
+  
+  
+   $fb_url_params = array(
+      'caption' => urlencode('caption' . time()),
+      'name' => urlencode('title' . time()),
+      'link' => urlencode('http://mws.all4senses.com/article-1'),
+      'message' => urlencode('description' . time()),
+      'description' => urlencode('user_message' . time()),
+      'actions' => urlencode('{"name": "' . 'title123' . '", "link": "' . 'http://mws.all4senses.com/home' . '"}'),
+      //'method' => 'post',
+    );
+
+//  if($userAction['media_items'])
+//      $fb_url_params['picture'] = 'src';
+
+    $result = fboauth_graph_query("$fb_id/feed", $access_token, $fb_url_params);
+    dpm($result);
 }
 
 
