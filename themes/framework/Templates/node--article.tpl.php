@@ -48,6 +48,8 @@
   
   print '<div>Test</div>'; 
   
+  $url = 'http://mws.all4senses.com' . ($_SERVER['REQUEST_URI'] == '/home' ? '/' : $_SERVER['REQUEST_URI']);
+  
   ?>
     
 <div id="fb-root"></div>
@@ -63,7 +65,7 @@
 
 
 
-  <?php dpm($content); //print render($content['comments']); ?>
+<?php hide($content['links']); //print render($content['comments']); ?>
 
 <?php if (!$page): ?>
   </article> <!-- /.node -->
