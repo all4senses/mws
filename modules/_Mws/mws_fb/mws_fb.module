@@ -25,10 +25,20 @@ function mws_fb_user_login(&$edit, $account) {
   
   if (isset($_REQUEST['code']) && $shortLiveToken = fboauth_access_token($_REQUEST['code'], 'connect')) {
     if ($longLiveToken = mws_fb_getLongLiveToken($shortLiveToken)) {
+      $fb_users = variable_get('fb_users', array());
       $fbuser = fboauth_graph_query('me', $longLiveToken);
+      $fbuser->longLiveToken = $longLiveToken;
+      $fb_users[$fbuser->id] = $fbuser;
+      variable_set('fb_users', $fb_users);
       $_SESSION['fb_id'] = $fbuser->id;
       $_SESSION['fb_longLiveToken'] = $longLiveToken;
     }
+  }
+  
+  global $user;
+  if ($user->uid == 1) {
+    $fb_users = variable_get('fb_users', array());
+    dpm($fb_users);
   }
 
 /*  
