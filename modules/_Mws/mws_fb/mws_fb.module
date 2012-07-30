@@ -129,12 +129,12 @@ function mws_fb_photoImport($fb_id, $access_token) {
   
   
    $fb_url_params = array(
-      'caption' => urlencode('caption' . time()),
-      'name' => urlencode('title' . time()),
-      'link' => urlencode('http://mws.all4senses.com/article-1'),
-      'message' => urlencode('description' . time()),
-      'description' => urlencode('user_message' . time()),
-      //'actions' => urlencode('{"name": "' . 'title123' . '", "link": "' . 'http://mws.all4senses.com' . '"}'),
+      'caption' => 'caption' . time(),
+      'name' => 'title' . time(),
+      'link' => 'http://mws.all4senses.com/article-1',
+      'message' => 'description' . time(),
+      'description' => 'user_message' . time(),
+      'actions' => '{"name": "' . 'title123' . '", "link": "' . 'http://mws.all4senses.com' . '"}',
       'method' => 'post',
     );
 
