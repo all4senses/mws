@@ -21,7 +21,7 @@ function mws_fb_menu() {
 
 function mws_fb_fboauth_actions_alter(&$actions) {
   // Replace the normal login callback with custom login callback.
-  $actions['connect']['permissions'][] = 'publish_stream';
+  //$actions['connect']['permissions'][] = 'publish_stream';
 }
 
 /**
@@ -40,14 +40,6 @@ function mws_fb_user_login(&$edit, $account) {
       $_SESSION['fb_longLiveToken'] = $longLiveToken;
     }
   }
-  
-  
-
-/*  
-  dpm($_SERVER);
-  dpm($_REQUEST);
-  dpm($_SESSION);
-*/  
 }
 
 
@@ -108,7 +100,9 @@ function mws_fb_getLongLiveToken($token, $app_id = NULL, $app_secret = NULL) {
 
 function mws_fb_getTokenPermissions($fb_id, $access_token) {
   module_load_include('inc', 'fboauth', 'includes/fboauth.fboauth');
-  return fboauth_graph_query("$fb_id/permissions", $access_token);
+  
+  $result = fboauth_graph_query("$fb_id/permissions", $access_token);
+  return $result->data[0];
 }
 
 function mws_fb_photoImport($fb_id, $access_token) {
@@ -202,12 +196,17 @@ function mws_fb_fbLoginLink() {
   $url = 'http://mws.all4senses.com' . ($_SERVER['REQUEST_URI'] == '/home' ? '/' : $_SERVER['REQUEST_URI']);
   
   if (isset($_SESSION['fb_longLiveToken'])) {
-    
+    $become_comedian_link = '';
     $permissions = mws_fb_getTokenPermissions($_SESSION['fb_id'], $_SESSION['fb_longLiveToken']);
-    dpm($permissions);
+    if (!isset($permissions->stream_publish) || !isset($permissions->user_photos) || !isset($permissions->user_about_me) || !isset($permissions->user_website)) {
+      $link = fboauth_action_link_properties('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);
+      $link['query']['scope'] .= ',publish_stream,user_photos,user_about_me,user_website';
+      $become_comedian_link = l(t('Wanna become comedian and Publish to Facebook?'), $link['href'], array('query' => $link['query']));
+    }
+    
     mws_fb_photoImport($_SESSION['fb_id'], $_SESSION['fb_longLiveToken']);
     
-    return '<div>You are logged in via FB id: ' . $_SESSION['fb_id'] . '</div>';//<div>fb_longLiveToken = ' . $_SESSION['fb_longLiveToken'] . '</div>';
+    return '<div>You are logged in via FB id: ' . $_SESSION['fb_id'] . '</div>' . $become_comedian_link;
   }
   else {
     //print fboauth_action_display('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);  
