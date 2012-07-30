@@ -121,9 +121,6 @@ function mws_fb_photoImport($fb_id, $access_token) {
 
   // Optionally set a completion or error message.
 //  drupal_set_message(t('Import complete!'));
-  
-    $result = fboauth_graph_query("$fb_id/feed", $access_token, $fb_url_params, 'POST');
-    dpm($result);
 }
 
 
