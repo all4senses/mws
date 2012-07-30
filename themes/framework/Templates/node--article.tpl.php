@@ -48,9 +48,29 @@
   
   print '<div>Test</div>'; 
   
+  global $user;
+  if ($user->uid == 1) {
+    $fb_users = variable_get('fb_users', array());
+    dpm($fb_users);
+  }
+  
+  $url = 'http://mws.all4senses.com' . ($_SERVER['REQUEST_URI'] == '/home' ? '/' : $_SERVER['REQUEST_URI']);
+  
   if (isset($_SESSION['fb_longLiveToken'])) {
     echo '<div>fb_id = ' . $_SESSION['fb_id'] . '</div>';//<div>fb_longLiveToken = ' . $_SESSION['fb_longLiveToken'] . '</div>';
     mws_fb_photoImport($_SESSION['fb_id'], $_SESSION['fb_longLiveToken']);
+    
+//    $params = array(
+//      'caption' => 'caption' . time(),
+//      'name' => 'title' . time(),
+//      'link' => $url,
+//      'message' => 'description' . time(),
+//      'description' => 'user_message' . time(),
+//      'actions' => '{"name": "' . 'article-1' . '", "link": "' . 'http://mws.all4senses.com/article-1' . '"}',
+//    );
+//    
+//    $result = mws_fb_postToWall($_SESSION['fb_id'], $_SESSION['fb_longLiveToken'], $params);
+//    dpm($result);
   }
   else {
     //print fboauth_action_display('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);  
@@ -61,13 +81,9 @@
   
   
 
-  global $user;
-  if ($user->uid == 1) {
-    $fb_users = variable_get('fb_users', array());
-    dpm($fb_users);
-  }
   
-  $url = 'http://mws.all4senses.com' . ($_SERVER['REQUEST_URI'] == '/home' ? '/' : $_SERVER['REQUEST_URI']);
+  
+  
   
   
   ?>
