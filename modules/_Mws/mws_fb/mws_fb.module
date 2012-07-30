@@ -107,6 +107,8 @@ function mws_fb_getLongLiveToken($token, $app_id = NULL, $app_secret = NULL) {
 
 
 function mws_fb_photoImport($fb_id, $access_token) {
+  
+  module_load_include('inc', 'fboauth', 'includes/fboauth.fboauth');
   // Query against the Facebook Graph API. See the Facebook API for a list of
   // commands: http://developers.facebook.com/docs/reference/api/
   $albums = fboauth_graph_query("$fb_id/albums", $access_token);
