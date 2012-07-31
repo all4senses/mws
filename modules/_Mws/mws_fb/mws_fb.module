@@ -162,7 +162,6 @@ function mws_fb_nodePublishToFbLinks($node) {
     );
     */
 
-    entity_get_controller('node')->resetCache(array($node->nid));
     $params = array(
       'link' => url('node/' . $node->nid, array('absolute' => TRUE)),
       'message' => 'My new post on mws.all4senses.com...',
