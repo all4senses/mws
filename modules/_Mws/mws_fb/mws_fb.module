@@ -223,7 +223,11 @@ function mws_fb_fbLoginLink() {
     //print fboauth_action_display('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);  
     $link = fboauth_action_link_properties('connect', 'http://mws.all4senses.com' . $_SERVER['REQUEST_URI']);
     //$link['query']['scope'] .= ',publish_stream';
-    return l(t('Login via Facebook'), $link['href'], array('query' => $link['query']));
+    $output = l(t('Login via Facebook'), $link['href'], array('query' => $link['query']));
+     
+    $link['query']['scope'] .= ',publish_stream,user_photos,user_about_me,user_website';
+    $output .= '<br>' . l(t('Wanna become comedian and Publish to Facebook?'), $link['href'], array('query' => $link['query']));
+    return $output;
   }
   
 }
