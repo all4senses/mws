@@ -133,7 +133,7 @@ function mws_fb_postToWall($fb_id, $access_token, $params) {
 function mws_fb_node_update($node) {
   if ($node->type == 'article') {
     $_SESSION['just_published_' . $node->nid] = TRUE;
-    //mws_fb_nodePublishToFbLinks($node);
+    mws_fb_nodePublishToFbLinks($node);
   }
 }
 
