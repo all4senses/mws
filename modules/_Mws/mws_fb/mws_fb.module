@@ -133,16 +133,15 @@ function mws_fb_postToWall($fb_id, $access_token, $params) {
 function mws_fb_node_update($node) {
   if ($node->type == 'article') {
     $_SESSION['just_published_' . $node->nid] = TRUE;
-    mws_fb_nodePublishToFbLinks($node);
+    //mws_fb_nodePublishToFbLinks($node);
   }
 }
 
 
 function mws_fb_node_insert($node) {
   if ($node->type == 'article') {
-    
     $_SESSION['just_published_' . $node->nid] = TRUE;
-    mws_fb_nodePublishToFbLinks($node);
+    //mws_fb_nodePublishToFbLinks($node);
   }
 }
 
@@ -321,10 +320,10 @@ function mws_fb_node_view($node) {
     case 'article':
       mws_fb_addSocialShareData_toPage($node);
       
-//      if (isset($_SESSION['just_published_' . $node->nid]) && $_SESSION['just_published_' . $node->nid]) {
-//        mws_fb_nodePublishToFbLinks($node);
-//        $_SESSION['just_published_' . $node->nid] = FALSE;
-//      }
+      if (isset($_SESSION['just_published_' . $node->nid]) && $_SESSION['just_published_' . $node->nid]) {
+        mws_fb_nodePublishToFbLinks($node);
+        unset($_SESSION['just_published_' . $node->nid]);// = FALSE;
+      }
       
       break;
   }
