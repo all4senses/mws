@@ -97,12 +97,12 @@ function mws_fb_getLongLiveToken($token, $app_id = NULL, $app_secret = NULL) {
 }
 
 
-
 function mws_fb_userCanPublish($fb_id, $access_token) {
   module_load_include('inc', 'fboauth', 'includes/fboauth.fboauth');
   $result = fboauth_graph_query("$fb_id/permissions", $access_token);
   return (isset($result->data[0]->publish_stream) && isset($result->data[0]->user_photos) && isset($result->data[0]->user_about_me) && isset($result->data[0]->user_website));
 }
+
 
 function mws_fb_photoImport($fb_id, $access_token) {
   
@@ -122,8 +122,6 @@ function mws_fb_photoImport($fb_id, $access_token) {
 }
 
 
-
-
 function mws_fb_postToWall($fb_id, $access_token, $params) {
   module_load_include('inc', 'fboauth', 'includes/fboauth.fboauth');
   $params['method'] = 'post';
@@ -132,41 +130,49 @@ function mws_fb_postToWall($fb_id, $access_token, $params) {
 }
 
 
+function mws_fb_node_update($node) {
+  if ($node->type == 'article') {
+    $_SESSION['just_published_' . $node->nid] = TRUE;
+    //mws_fb_nodePublishToFbLinks($node);
+  }
+}
+
+
 function mws_fb_node_insert($node) {
   if ($node->type == 'article') {
-   if (isset($_SESSION['fb_id']) && mws_fb_userCanPublish($_SESSION['fb_id'], $_SESSION['fb_longLiveToken'])) {
-      //dpm($node);
-      /*
-      $params = array(
-          'caption' => 'It could be a joke :)',
-          'name' => $node->title,
-          'link' => url('node/' . $node->nid, array('absolute' => TRUE)),
-          'message' => $node->body['und'][0]['value'],
-          'description' => 'My new post on mws.all4senses.com...',
-          'actions' => '{"name": "' . 'My profile at mws.all4senses.com' . '", "link": "' . url('user/' . $node->uid, array('absolute' => TRUE)) . '"}',
-      );
-      */
-      
-      $params = array(
+    
+    $_SESSION['just_published_' . $node->nid] = TRUE;
+    mws_fb_nodePublishToFbLinks($node);
+  }
+}
+
+
+function mws_fb_nodePublishToFbLinks($node) {
+  
+  if (isset($_SESSION['fb_id']) && mws_fb_userCanPublish($_SESSION['fb_id'], $_SESSION['fb_longLiveToken'])) {
+    //dpm($node);
+    /*
+    $params = array(
+        'caption' => 'It could be a joke :)',
+        'name' => $node->title,
         'link' => url('node/' . $node->nid, array('absolute' => TRUE)),
-        'message' => 'My new post on mws.all4senses.com...',
-      );
-      
-      dpm($node);
-      $new_node = node_load($node->nid);
-      dpm($new_node);
-      dpm($params);
-      $result = mws_fb_postToWall($_SESSION['fb_id'], $_SESSION['fb_longLiveToken'], $params);
-      dpm($result);
-   }
- }
+        'message' => $node->body['und'][0]['value'],
+        'description' => 'My new post on mws.all4senses.com...',
+        'actions' => '{"name": "' . 'My profile at mws.all4senses.com' . '", "link": "' . url('user/' . $node->uid, array('absolute' => TRUE)) . '"}',
+    );
+    */
+
+    entity_get_controller('node')->resetCache(array($node->nid));
+    $params = array(
+      'link' => url('node/' . $node->nid, array('absolute' => TRUE)),
+      'message' => 'My new post on mws.all4senses.com...',
+    );
+
+    $result = mws_fb_postToWall($_SESSION['fb_id'], $_SESSION['fb_longLiveToken'], $params);
+    dpm($result);
+  }
   
 }
-
-function mws_fb_node_update($node) {
- mws_fb_node_insert($node);
-}
-
 
 
 /**
@@ -245,12 +251,14 @@ function mws_fb_user_delete($account) {
   // Delete fb related data of this module.
 }
 
+
 /**
  * Implements hook_user_cancel().
  */
 function mws_fb_user_cancel($edit, $account, $method) {
   mws_fb_user_delete($account);
 }
+
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -290,6 +298,7 @@ function mws_fb_form_user_profile_form_alter(&$form, &$form_state) {
   */
 }
 
+
 /**
  * Implements hook_mws_fb_actions().
  */
@@ -308,14 +317,20 @@ function mws_fb_mws_fb_actions() {
 }
 
 
-
 function mws_fb_node_view($node) {
   switch ($node->type) {
     case 'article':
       mws_fb_addSocialShareData_toPage($node);
+      
+//      if (isset($_SESSION['just_published_' . $node->nid]) && $_SESSION['just_published_' . $node->nid]) {
+//        mws_fb_nodePublishToFbLinks($node);
+//        $_SESSION['just_published_' . $node->nid] = FALSE;
+//      }
+      
       break;
   }
 }
+
 
 function mws_fb_addSocialShareData_toPage($node) {
   
