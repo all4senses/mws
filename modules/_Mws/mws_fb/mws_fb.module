@@ -133,11 +133,7 @@ function mws_fb_postToWall($fb_id, $access_token, $params) {
 
 
 function mws_fb_node_insert($node) {
-  mws_fb_node_update($node);
-}
-
-function mws_fb_node_update($node) {
- if ($node->type == 'article') {
+  if ($node->type == 'article') {
    if (isset($_SESSION['fb_id']) && mws_fb_userCanPublish($_SESSION['fb_id'], $_SESSION['fb_longLiveToken'])) {
       //dpm($node);
       /*
@@ -157,11 +153,18 @@ function mws_fb_node_update($node) {
       );
       
       dpm($node);
+      $new_node = node_load($node->nid);
+      dpm($new_node);
       dpm($params);
       $result = mws_fb_postToWall($_SESSION['fb_id'], $_SESSION['fb_longLiveToken'], $params);
       dpm($result);
    }
  }
+  
+}
+
+function mws_fb_node_update($node) {
+ mws_fb_node_insert($node);
 }
 
 
