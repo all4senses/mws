@@ -127,7 +127,7 @@ function mws_fb_photoImport($fb_id, $access_token) {
 function mws_fb_postToWall($fb_id, $access_token, $params) {
   module_load_include('inc', 'fboauth', 'includes/fboauth.fboauth');
   $params['method'] = 'post';
-  $result = fboauth_graph_query("$fb_id/feed", $access_token, $params, 'POST');
+  $result = fboauth_graph_query("$fb_id/links", $access_token, $params, 'POST');
   return $result;
 }
 
