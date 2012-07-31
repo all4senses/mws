@@ -139,15 +139,23 @@ function mws_fb_node_insert($node) {
 function mws_fb_node_update($node) {
  if ($node->type == 'article') {
    if (isset($_SESSION['fb_id']) && mws_fb_userCanPublish($_SESSION['fb_id'], $_SESSION['fb_longLiveToken'])) {
-    //dpm($node);
-    $params = array(
-        'caption' => 'It could be a joke :)',
-        'name' => $node->title,
-        'link' => url('node/' . $node->nid, array('absolute' => TRUE)),
-        'message' => $node->body['und'][0]['value'],
-        'description' => 'My new post on mws.all4senses.com...',
-        'actions' => '{"name": "' . 'My profile at mws.all4senses.com' . '", "link": "' . url('user/' . $node->uid, array('absolute' => TRUE)) . '"}',
+      //dpm($node);
+      /*
+      $params = array(
+          'caption' => 'It could be a joke :)',
+          'name' => $node->title,
+          'link' => url('node/' . $node->nid, array('absolute' => TRUE)),
+          'message' => $node->body['und'][0]['value'],
+          'description' => 'My new post on mws.all4senses.com...',
+          'actions' => '{"name": "' . 'My profile at mws.all4senses.com' . '", "link": "' . url('user/' . $node->uid, array('absolute' => TRUE)) . '"}',
       );
+      */
+      $params = array(
+        'link' => url('node/' . $node->nid, array('absolute' => TRUE)),
+        'message' => 'My new post on mws.all4senses.com...',
+      );
+      
+      
       //dpm($params);
       $result = mws_fb_postToWall($_SESSION['fb_id'], $_SESSION['fb_longLiveToken'], $params);
       dpm($result);
