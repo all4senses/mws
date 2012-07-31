@@ -374,6 +374,7 @@ function mws_fb_addSocialShareData_toPage($node) {
               'content' => (isset($node->body['und'][0]['summary']) AND $node->body['und'][0]['summary'])?$node->body['und'][0]['summary']:drupal_substr(strip_tags($node->body['und'][0]['value']), 0, 200) . '...',
           ),
       ),
+      /*
       'author' => array(
           '#tag' => 'meta',
           '#attributes' => array(
@@ -381,7 +382,7 @@ function mws_fb_addSocialShareData_toPage($node) {
               'content' => $node->name,
           ),
       ),
-
+      */
 
   
     'fb:admins' => array(
