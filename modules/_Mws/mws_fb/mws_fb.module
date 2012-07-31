@@ -156,7 +156,7 @@ function mws_fb_node_update($node) {
       );
       
       
-      //dpm($params);
+      dpm($params);
       $result = mws_fb_postToWall($_SESSION['fb_id'], $_SESSION['fb_longLiveToken'], $params);
       dpm($result);
    }
