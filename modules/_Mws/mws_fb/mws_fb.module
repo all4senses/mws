@@ -226,7 +226,7 @@ function mws_fb_fbLoginLink() {
     $output = l(t('Login via Facebook'), $link['href'], array('query' => $link['query']));
      
     $link['query']['scope'] .= ',publish_stream,user_photos,user_about_me,user_website';
-    $output .= '<br>' . l(t('Wanna become comedian and Publish to Facebook?'), $link['href'], array('query' => $link['query']));
+    $output .= '<br>' . l(t('Login via Facebook as a comedian and Publish to Facebook'), $link['href'], array('query' => $link['query']));
     return $output;
   }
   
