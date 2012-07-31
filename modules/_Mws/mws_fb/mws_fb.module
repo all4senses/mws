@@ -338,7 +338,7 @@ function mws_fb_addSocialShareData_toPage($node) {
           '#tag' => 'meta',
           '#attributes' => array(
               'name' => 'title',
-              'content' => "Video '" . $node->title . "' by " . $publisher_title,
+              'content' => $node->title,
           ),
       ),
       'DC.title' => array(
