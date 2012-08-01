@@ -61,10 +61,11 @@
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>  
 
-<div class="fb-facepile" app_id="271416119626001" data-href="http://mws.all4senses.com" data-max-rows="1" data-width="300"></div>
+
 <div class="fb-comments" data-href="<?php echo $url; ?>" data-num-posts="2" data-width="470"></div>
 
 
+<div class="fb-facepile" app_id="271416119626001" data-max-rows="1" data-width="300"></div>
 <iframe src="//www.facebook.com/plugins/facepile.php?size=medium&amp;max_rows=1&amp;width=300&amp;colorscheme=light&amp;appId=271416119626001" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:300px;" allowTransparency="true"></iframe>
 
 <script src="http://connect.facebook.net/en_US/all.js#appId=271416119626001&amp;xfbml=1"></script><fb:facepile></fb:facepile>
