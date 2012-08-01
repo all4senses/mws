@@ -62,7 +62,7 @@
 }(document, 'script', 'facebook-jssdk'));</script>  
 
 <div class="fb-comments" data-href="<?php echo $url; ?>" data-num-posts="2" data-width="470"></div>
-
+<div class="fb-facepile" data-href="http://mws.all4senses.com" data-max-rows="1" data-width="300"></div>
 
 
 <?php //hide($content['links']); //print render($content['comments']); ?>
