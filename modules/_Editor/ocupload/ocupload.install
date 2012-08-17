@@ -1,0 +1,166 @@
+<?php
+/**
+ * @file
+ * Install/Uninstall functions
+ */
+
+
+/**
+ * Implements hook_schema().
+ */
+function ocupload_schema() {
+  $shema['ocupload_templates'] = array(
+    'fields' => array(
+      'tid' => array(
+        'description' => 'Template ID',
+        'type' => 'serial',
+        'size' => 'tiny',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'mask' => array(
+        'description' => 'File mask',
+        'type' => 'varchar',
+        'length' => 200,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'path' => array(
+        'description' => 'Upload path',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'template' => array(
+        'description' => 'Template',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '<a href="!filepath">!filename</a>',
+      ),
+      'template_select' => array(
+        'description' => 'Template for replace selected text',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '<a href="!filepath">!text</a>',
+      ),
+      'image_style' => array(
+        'description' => 'Image style',
+        'type' => 'varchar',
+        'length' => 30,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'link_to_original' => array(
+        'description' => 'Wrap template link to original image',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'link_only_big' => array(
+        'description' => '1 - wrap template only big images, 0 - wrap all images',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'show_in_colorbox' => array(
+        'description' => '1 - show original image in colorbox, 0 - open in new page',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'rename_file' => array(
+        'description' => '1 - change filename to unique number (datetime), 0 - not change',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+    ),
+    'primary key' => array('tid'),
+    'description' => 'Module templates',
+  );
+  return $shema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function ocupload_install() {
+  module_load_include('inc', 'ocupload');
+  
+  $templates = array(
+    array(
+      'mask' => 'jpg,jpeg,gif,png',
+      'path' => 'images',
+      'template' => '<img src="!filepath" alt="" />',
+      'template_select' => '<a href="!filepath" target="_blank">!text</a>',
+      'image_style' => 'large',
+      'link_to_original' => 1,
+      'link_only_big' => 1,
+      'show_in_colorbox' => module_exists('colorbox') ? 1 : 0,
+      'rename_file' => 1,
+    ),
+    array(
+      'mask' => 'rar,zip,doc,xls',
+      'path' => 'files',
+      'template' => '<a href="!filepath">!filename</a>',
+      'template_select' => '<a href="!filepath">!text</a>',
+      'rename_file' => 0,
+    ),
+    array(
+      'mask' => 'webm,mp4,ogv',
+      'path' => 'video',
+      'template' => '<video src="!filepath" width="480" height="390" controls></video>',
+      'template_select' => '<a href="!filepath">!text</a>',
+      'rename_file' => 0,
+    ),
+  );
+  
+  foreach ($templates as $template) {
+    $directory = 'public://' . $template['path'];
+    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+  }
+  
+  ocupload_template_save($templates, TRUE);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function ocupload_uninstall() {
+  foreach (array('ocupload_delete_unused_files') as $name) {
+    variable_del($name);
+  }
+}
+
+/**
+ * Add new col
+ */
+function ocupload_update_7100() {
+  db_add_field('ocupload_templates', 'show_in_colorbox', array(
+    'description' => '1 - show original image in colorbox, 0 - open in new page',
+    'type' => 'int',
+    'size' => 'tiny',
+    'not null' => TRUE,
+    'default' => 0,
+  ));
+}
+
+/**
+ * Change col length
+ */
+function ocupload_update_7101() {
+  db_change_field('ocupload_templates', 'path', 'path', array(
+    'description' => 'Upload path',
+    'type' => 'varchar',
+    'length' => 255,
+    'not null' => TRUE,
+    'default' => '',
+  ));
+}

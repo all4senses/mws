@@ -29,13 +29,21 @@ function mws_fb_fboauth_actions_alter(&$actions) {
  */
 function mws_fb_user_login(&$edit, $account) {
   
+  // If just logged in via fb, get (refresh) longlive token and save it.
   if (isset($_REQUEST['code']) && $shortLiveToken = fboauth_access_token($_REQUEST['code'], 'connect')) {
+    
     if ($longLiveToken = mws_fb_getLongLiveToken($shortLiveToken)) {
+      
       $fb_users = variable_get('fb_users', array());
+      
+      // Get user data to save it along with long a long token.
       $fbuser = fboauth_graph_query('me', $longLiveToken);
       $fbuser->longLiveToken = $longLiveToken;
       $fb_users[$fbuser->id] = $fbuser;
+      
       variable_set('fb_users', $fb_users);
+      
+      // Save a session vars to access fb id from any function.
       $_SESSION['fb_id'] = $fbuser->id;
       $_SESSION['fb_longLiveToken'] = $longLiveToken;
     }
@@ -241,6 +249,21 @@ function mws_fb_fbLoginLink() {
     return $output;
   }
   
+}
+
+
+function fboauth_action_display_WithExtendedPermissions($action_name, $redirect = NULL, $app_id = NULL, $addScope = NULL) {
+  // Use the default App ID if not specified.
+  $app_id = isset($app_id) ? $app_id : variable_get('fboauth_id', '');
+
+  $action = fboauth_action_load($action_name);
+  $link = fboauth_action_link_properties($action_name, $redirect, $app_id);
+  
+  if ($addScope) {
+    $link['query']['scope'] .= ',' . $addScope;
+  }
+  $theme = isset($action['theme']) ? $action['theme'] : array('fboauth_action__' . $action_name, 'fboauth_action');
+  return theme($theme, array('action' => $action, 'properties' => $link));
 }
 
 

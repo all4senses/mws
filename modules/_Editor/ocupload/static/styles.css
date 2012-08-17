@@ -1,0 +1,45 @@
+.bue-ui .ocupload-button-wrapper {
+  display: inline-block;
+}
+
+.bue-ui .ocupload-button-wrapper object {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.bue-ui .ocupload-progress {
+  font-size: .8em;
+  padding-left: .5em;
+}
+
+.cke_editor .ocupload-processed {
+  position: relative;
+}
+
+.cke_editor .ocupload-processed object {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  cursor: pointer;
+}
+
+#swfupload-queue {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 200px;
+}
+
+#swfupload-queue div {
+  padding: .5em 1em;
+  background: #E0E0D8;
+  margin: 5px 10px;
+  border-radius: 4px; -moz-border-radius: 4px;
+  line-height: 120%;
+  white-space: nowrap;
+  overflow: hidden;
+}
