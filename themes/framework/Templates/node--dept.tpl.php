@@ -46,7 +46,7 @@
     
     
 //dpm($node);
-
+/*
 $term_children = taxonomy_get_children($node->field_category['und'][0]['taxonomy_term']->tid, $node->field_category['und'][0]['taxonomy_term']->vid);
 
 
@@ -56,24 +56,21 @@ foreach($term_children as $term_child) {
 }
 
 if ($tids) {
-  $nodes = NULL;
+  $child = NULL;
   foreach ($tids as $tid) {
     if($nodes = taxonomy_select_nodes($tid)) {
-      dpm($nodes);
       $child = node_load($nodes[0]);
       break;
     }
   }
   
-  if ($child->type == 'dept') {
+  if (!$child || $child->type == 'dept') {
     $display = 'block_depts';
   }
   else {
     $display = 'block_products';
   }
-  dpm($child->type);
-  dpm($display);
-  
+ 
   $view = views_get_view('catalog_node_siblings');
   $options = array(
     'id' => 'tid',
@@ -87,7 +84,7 @@ if ($tids) {
   $view->add_item($display, 'filter', 'taxonomy_index', 'tid', $options);
   echo $view->preview($display);
 }
-    
+*/    
 ?>
     
     
