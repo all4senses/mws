@@ -108,7 +108,7 @@ if ($tids) {
       break;
   }
 
-  $view->add_item($display_id, 'sort', $table, $id, $options);
+  $view->add_item($display, 'sort', $table, $id, $options);
   
   echo $view->preview($display);
 }
