@@ -82,7 +82,13 @@ if ($tids) {
     'group' => 0,
   );
   $view->add_item($display, 'filter', 'taxonomy_index', 'tid', $options);
+
   
+  
+  
+  
+  
+/*  
   $relationship = NULL;
   $order = (@$_GET['order'] ? $_GET['order']: 'ASC');
   switch (@$_GET['sort']) {
@@ -115,7 +121,7 @@ if ($tids) {
   if ($relationship) {
     $options['relationship'] = $relationship;
   }
-  dpm($options);
+  
   $view->add_item($display, 'sort', $table, $id, $options);
  
   $query = '';
@@ -132,7 +138,7 @@ if ($tids) {
   
   foreach($sort_options as $sort_option) {
     $order_marker = '';
-    if ($sort_option == $_GET['sort']) {
+    if ($sort_option == @$_GET['sort']) {
       if (!@$_GET['order'] || $_GET['order'] == 'DESC') {
         $current_order = 'ASC';
         $order_marker = '-down-';
@@ -148,8 +154,23 @@ if ($tids) {
     $sort_exposed .= ' | <a href="' . $start_url . 'sort=' . $sort_option . '&order=' . $current_order . '">' . $sort_option . $order_marker . '</a>';
   }
   
-  
   echo $sort_exposed;
+  
+*/  
+  
+  $order = 'DESC';
+  $id = 'title';
+  $table = 'node';
+  $label = 'Title';
+
+  $options = array(
+    'order' => $order,
+    'id' => $id,
+  );
+  
+  $view->add_item($display, 'sort', $table, $id, $options);
+ 
+  
   
   echo $view->preview($display);
 }
