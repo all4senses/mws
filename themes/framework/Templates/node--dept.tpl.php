@@ -82,7 +82,7 @@ if ($tids) {
     'group' => 0,
   );
   $view->add_item($display, 'filter', 'taxonomy_index', 'tid', $options);
-    
+  
   
   $order = (@$_GET['order'] ? $_GET['order']: 'ASC');
   switch (@$_GET['sort']) {
@@ -108,8 +108,15 @@ if ($tids) {
       break;
   }
 
-  $view->add_item($display, 'sort', $table, $id, $options);
+  $options = array(
+    'order' => $order,
+    'id' => $id,
+    'expose' => array('label' => $label),
+    'relationship' => $relationship,
+  );
   
+  $view->add_item($display, 'sort', $table, $id, $options);
+ 
   echo $view->preview($display);
 }
     
