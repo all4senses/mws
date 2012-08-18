@@ -45,7 +45,7 @@
 <?php echo 'Test Dept'; 
     
     
-dpm($node);
+//dpm($node);
 
 $term_children = taxonomy_get_children($node->field_category['und'][0]['taxonomy_term']->tid, $node->field_category['und'][0]['taxonomy_term']->vid);
 
@@ -59,17 +59,20 @@ if ($tids) {
   $nodes = NULL;
   foreach ($tids as $tid) {
     if($nodes = taxonomy_select_nodes($tid)) {
-      //dpm($nodes);
+      dpm($nodes);
       $child = node_load($nodes[0]);
       break;
     }
   }
+  
   if ($child->type == 'dept') {
     $display = 'block_depts';
   }
   else {
     $display = 'block_products';
   }
+  dpm($child->type);
+  dpm($display);
   
   $view = views_get_view('catalog_node_siblings');
   $options = array(
