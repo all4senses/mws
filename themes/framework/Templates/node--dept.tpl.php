@@ -65,7 +65,7 @@ dpm($view);
 //
 //$view->add_item('block', 'filter', 'taxonomy_index', 'tid', $options);
                 
-echo $view->preview('block');
+print $view->preview('default');
     
 ?>
     
