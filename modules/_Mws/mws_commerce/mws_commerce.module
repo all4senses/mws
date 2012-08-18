@@ -52,7 +52,7 @@ function mws_commerce_tokens($type, $tokens, array $data = array(), array $optio
     foreach ($tokens as $name => $original) {
       switch ($name) {
         case 'node-term-siblings':
-          
+          dpm($node);
           /*
           if ($node->type == 'review') {
             if (isset($node->field_ref_provider['und'][0]['target_id']) && $node->field_ref_provider['und'][0]['target_id']) {
