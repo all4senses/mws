@@ -1,0 +1,21 @@
+
+.ief-tabledrag-header {
+  border-right: none;
+}
+
+.ief-sort-order-header {
+  border-left: none;
+}
+
+.ief-first-column-header {
+  border-left: none;
+}
+
+.ief-tabledrag-handle {
+  width: 20px;
+  padding-right: 0;
+}
+
+.ief-tabledrag-handle a.tabledrag-handle {
+  padding-right: .5em;
+}
