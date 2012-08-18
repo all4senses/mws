@@ -158,7 +158,7 @@ if ($tids) {
   
 */  
   
-  $order = 'DESC';
+  $order = 'ASC';
   $id = 'title';
   $table = 'node';
   $label = 'Title';
