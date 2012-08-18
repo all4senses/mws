@@ -110,8 +110,11 @@ if ($tids) {
     'order' => $order,
     'id' => $id,
     //'expose' => array('label' => $label),
-    'relationship' => $relationship,
+    //'relationship' => $relationship,
   );
+  if ($relationship) {
+    $options['relationship'] = $relationship;
+  }
   dpm($options);
   $view->add_item($display, 'sort', $table, $id, $options);
  
