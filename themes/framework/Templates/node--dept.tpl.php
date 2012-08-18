@@ -46,7 +46,7 @@
     
     
 $view = views_get_view('catalog_node_siblings');    
-dpm($view);
+
 
 $tids = array(
   3 => '3',
@@ -64,8 +64,9 @@ $options = array(
 );
 
 $view->add_item('block', 'filter', 'taxonomy_index', 'tid', $options);
-                
-print $view->preview('default');
+dpm($view);
+
+//print $view->preview('default');
     
 ?>
     
