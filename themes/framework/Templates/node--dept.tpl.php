@@ -56,6 +56,13 @@ foreach($term_children as $term_child) {
 }
 
 if ($tids) {
+  $nodes = NULL;
+  foreach ($tids as $tid) {
+    if($nodes = taxonomy_select_nodes($tid)) {
+      dpm($nodes);
+    }
+  }
+  
   $view = views_get_view('catalog_node_siblings');    
   $options = array(
     'id' => 'tid',
