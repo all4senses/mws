@@ -83,7 +83,7 @@ if ($tids) {
   );
   $view->add_item($display, 'filter', 'taxonomy_index', 'tid', $options);
   
-  
+  $relationship = NULL;
   $order = (@$_GET['order'] ? $_GET['order']: 'ASC');
   switch (@$_GET['sort']) {
     case 'price':
@@ -97,14 +97,12 @@ if ($tids) {
       $id = 'created';      
       $table = 'node';
       $label = 'Post date';
-      $relationship = 'none';
       break;
     
     default:
       $id = 'title';
       $table = 'node';
       $label = 'Title';
-      $relationship = 'none';
       break;
   }
 
