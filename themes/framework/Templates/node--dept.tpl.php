@@ -47,9 +47,10 @@
     
 dpm($node);
 
+$term_children = taxonomy_get_children($node->field_category['und'][0]['tid'], $node->field_category['und'][0]['tid']['taxonomy_term ']->vid);
+dpm($term_children);
+
 $view = views_get_view('catalog_node_siblings');    
-
-
 $tids = array(
   3 => '3',
   4 => '4',
