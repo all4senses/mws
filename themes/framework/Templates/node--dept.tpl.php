@@ -48,22 +48,22 @@
 $view = views_get_view('catalog_node_siblings');    
 dpm($view);
 
-//$tids = array(
-//  3 => '3',
-//  4 => '4',
-//);
-//
-//$options = array(
-//  'id' => 'tid',
-//  'value' => $tids, //  $tid,
-//  'type' => 'select',
-//  'vid' =>  'catalog',
-//  'hierarchy' => 1,
-//  'reduce_duplicates' => 1,
-//  'group' => 0,
-//);
-//
-//$view->add_item('block', 'filter', 'taxonomy_index', 'tid', $options);
+$tids = array(
+  3 => '3',
+  4 => '4',
+);
+
+$options = array(
+  'id' => 'tid',
+  'value' => $tids, //  $tid,
+  'type' => 'select',
+  'vid' =>  'catalog',
+  'hierarchy' => 1,
+  'reduce_duplicates' => 1,
+  'group' => 0,
+);
+
+$view->add_item('block', 'filter', 'taxonomy_index', 'tid', $options);
                 
 print $view->preview('default');
     
