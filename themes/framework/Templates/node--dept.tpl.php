@@ -129,8 +129,9 @@ if ($tids) {
   $start_url = $_SERVER['REQUESTED_URI'] . $query . ($query ? '&' : '?');
   
   $sort_exposed = '';
-  $order_marker = '';
+  
   foreach($sort_options as $sort_option) {
+    $order_marker = '';
     if ($sort_option == $_GET['sort']) {
       if (!@$_GET['order'] || $_GET['order'] == 'DESC') {
         $current_order = 'ASC';
@@ -144,7 +145,7 @@ if ($tids) {
     else {
       $current_order = 'ASC';
     }
-    $sort_exposed .= '<a href="' . $start_url . 'sort=' . $sort_option . '&order=' . $current_order . '">' . $sort_option . $order_marker . '</a>';
+    $sort_exposed .= ' | <a href="' . $start_url . 'sort=' . $sort_option . '&order=' . $current_order . '">' . $sort_option . $order_marker . '</a>';
   }
   
   
