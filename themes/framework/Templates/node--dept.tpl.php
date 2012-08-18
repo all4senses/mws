@@ -47,29 +47,28 @@
     
 dpm($node);
 
-$term_children = taxonomy_get_children($node->field_category['und'][0]['tid'], $node->field_category['und'][0]['tid']['taxonomy_term ']->vid);
+$term_children = taxonomy_get_children($node->field_category['und'][0]['tid'], $node->field_category['und'][0]['tid']['taxonomy_term']->vid);
 dpm($term_children);
 
-$view = views_get_view('catalog_node_siblings');    
-$tids = array(
-  3 => '3',
-  4 => '4',
-);
+$tids = NULL;
+foreach($term_children as $term_child) {
+  $tids[$term_child->tid] = $term_child->tid;
+}
 
-$options = array(
-  'id' => 'tid',
-  'value' => $tids, //  $tid,
-  'type' => 'select',
-  'vid' =>  'catalog',
-  'hierarchy' => 1,
-  'reduce_duplicates' => 1,
-  'group' => 0,
-);
-
-$view->add_item('block', 'filter', 'taxonomy_index', 'tid', $options);
-//dpm($view);
-
-print $view->preview('block');
+if ($tids) {
+  $view = views_get_view('catalog_node_siblings');    
+  $options = array(
+    'id' => 'tid',
+    'value' => $tids, 
+    'type' => 'select',
+    'vid' =>  'catalog',
+    'hierarchy' => 1,
+    'reduce_duplicates' => 1,
+    'group' => 0,
+  );
+  $view->add_item('block', 'filter', 'taxonomy_index', 'tid', $options);
+  echo $view->preview('block');
+}
     
 ?>
     
