@@ -46,7 +46,7 @@
     
     
 //dpm($node);
-/*
+
 $term_children = taxonomy_get_children($node->field_category['und'][0]['taxonomy_term']->tid, $node->field_category['und'][0]['taxonomy_term']->vid);
 
 
@@ -82,9 +82,37 @@ if ($tids) {
     'group' => 0,
   );
   $view->add_item($display, 'filter', 'taxonomy_index', 'tid', $options);
+    
+  
+  $order = (@$_GET['order'] ? $_GET['order']: 'ASC');
+  switch (@$_GET['sort']) {
+    case 'price':
+      $id = 'commerce_price_amount';      
+      $table = 'field_data_commerce_price';
+      $label = 'Price';
+      $relationship = 'field_product_product_id';
+      break;
+
+    case 'date':
+      $id = 'created';      
+      $table = 'node';
+      $label = 'Post date';
+      $relationship = 'none';
+      break;
+    
+    default:
+      $id = 'title';
+      $table = 'node';
+      $label = 'Title';
+      $relationship = 'none';
+      break;
+  }
+
+  $view->add_item($display_id, 'sort', $table, $id, $options);
+  
   echo $view->preview($display);
 }
-*/    
+    
 ?>
     
     
