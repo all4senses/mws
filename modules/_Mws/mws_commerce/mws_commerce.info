@@ -1,0 +1,6 @@
+name = Mws Commerce
+package = Mws
+description = "Mws for Commerce functions"
+core = 7.x
+tags[] = Mws
+files[] = mws_commerce.module

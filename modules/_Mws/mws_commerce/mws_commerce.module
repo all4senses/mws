@@ -1,0 +1,82 @@
+<?php
+
+/**
+ * @file
+ * Module contained miscelanious helper functions and hooks.
+ */
+
+
+/**
+ * Implements hook_menu().
+ */
+function mws_commerce_menu() {
+ /*
+  $items['request'] = array(
+    'title' => 'Make a request',
+    'page callback' => 'mws_commerce_makeRequest_ajax',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  ); 
+
+  return $items;
+  */
+}
+
+/**
+ * Implements hook_token_info().
+ */
+function mws_commerce_token_info() {
+  // Defines new token 'Provider name' in the node torens group.
+  $info['tokens']['node']['node-term-siblings'] = array(
+    'name' => t('Node term siblings'),
+    'description' => t('First Node siblings'),
+  );
+
+  return $info;
+}
+
+
+/**
+ * Implements hook_tokens().
+ * 
+ * Provides token for a current review's provider name. It set to selected from a list or from a manually filled field (if not selected from a list).
+ */
+function mws_commerce_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+  $sanitize = !empty($options['sanitize']);
+
+  // Add new token 'provider-name-for-current-review' to a 'node' tokens group.
+  if ($type == 'node' && !empty($data['node'])) {
+    $node = $data['node'];
+
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'node-term-siblings':
+          
+          /*
+          if ($node->type == 'review') {
+            if (isset($node->field_ref_provider['und'][0]['target_id']) && $node->field_ref_provider['und'][0]['target_id']) {
+              
+              $query = db_select('node', 'n');
+              $query->join('field_data_field_p_name', 'pn', "pn.entity_id = n.nid"); 
+              //$query->fields('n', array('nid', 'title'))
+              $query->fields('pn', array('field_p_name_value'))
+                    ->condition('nid', $node->field_ref_provider['und'][0]['target_id']);
+              
+              $provider_title = $query->execute()->fetchField();
+              $replacements[$original] = $provider_title;
+            }
+            else {
+              $replacements[$original] = check_plain($node->field_r_oprovider['und'][0]['value']);
+            }
+
+          }
+          */
+          
+          break;
+      }
+    }
+  }
+  
+  return $replacements;
+}
