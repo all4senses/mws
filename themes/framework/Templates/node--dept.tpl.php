@@ -45,6 +45,8 @@
 <?php echo 'Test Dept'; 
     
     
+dpm($node);
+
 $view = views_get_view('catalog_node_siblings');    
 
 
@@ -64,7 +66,7 @@ $options = array(
 );
 
 $view->add_item('block', 'filter', 'taxonomy_index', 'tid', $options);
-dpm($view);
+//dpm($view);
 
 print $view->preview('block');
     
