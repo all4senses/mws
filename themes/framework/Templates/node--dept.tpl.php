@@ -109,10 +109,10 @@ if ($tids) {
   $options = array(
     'order' => $order,
     'id' => $id,
-    'expose' => array('label' => $label),
+    //'expose' => array('label' => $label),
     'relationship' => $relationship,
   );
-  
+  dpm($options);
   $view->add_item($display, 'sort', $table, $id, $options);
  
   $query = '';
