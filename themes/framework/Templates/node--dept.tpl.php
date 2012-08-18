@@ -117,7 +117,6 @@ if ($tids) {
   
   $view->add_item($display, 'sort', $table, $id, $options);
  
-  dpm($_SERVER);
   $query = '';
   foreach ($_GET as $key => $value) {
     if ($key != 'q' && $key != 'sort' && $key != 'order') {
@@ -135,11 +134,11 @@ if ($tids) {
     if ($sort_option == $_GET['sort']) {
       if (!@$_GET['order'] || $_GET['order'] == 'DESC') {
         $current_order = 'ASC';
-        $order_marker = '-up-';
+        $order_marker = '-down-';
       }
       else {
         $current_order = 'DESC';
-        $order_marker = '-down-';
+        $order_marker = '-up-';
       }
     }
     else {
