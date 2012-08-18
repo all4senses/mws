@@ -88,7 +88,7 @@ if ($tids) {
   
   
   
-/*  
+  
   $relationship = NULL;
   $order = (@$_GET['order'] ? $_GET['order']: 'ASC');
   switch (@$_GET['sort']) {
@@ -156,21 +156,21 @@ if ($tids) {
   
   echo $sort_exposed;
   
-*/  
   
-  $order = 'ASC';
-  $id = 'title';
-  $table = 'node';
-  $label = 'Title';
-
-  $options = array(
-    'order' => $order,
-    'id' => $id,
-  );
   
-  $view->add_item($display, 'sort', $table, $id, $options);
- 
-  
+//  $order = 'ASC';
+//  $id = 'title';
+//  $table = 'node';
+//  $label = 'Title';
+//
+//  $options = array(
+//    'order' => $order,
+//    'id' => $id,
+//  );
+//  
+//  $view->add_item($display, 'sort', $table, $id, $options);
+// 
+//  
   
   echo $view->preview($display);
 }
