@@ -126,7 +126,7 @@ if ($tids) {
   }
   
   $sort_options = array('title', 'price', 'date');
-  $start_url = $_SERVER['REDIRECT_URI'] . $query . ($query ? '&' : '?');
+  $start_url = $_SERVER['REDIRECT_URL'] . $query . ($query ? '&' : '?');
   
   $sort_exposed = '';
   
