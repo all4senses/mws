@@ -59,11 +59,19 @@ if ($tids) {
   $nodes = NULL;
   foreach ($tids as $tid) {
     if($nodes = taxonomy_select_nodes($tid)) {
-      dpm($nodes);
+      //dpm($nodes);
+      $child = node_load($nodes[0]);
+      break;
     }
   }
+  if ($child->type == 'dept') {
+    $display = 'block_depts';
+  }
+  else {
+    $display = 'block_products';
+  }
   
-  $view = views_get_view('catalog_node_siblings');    
+  $view = views_get_view('catalog_node_siblings');
   $options = array(
     'id' => 'tid',
     'value' => $tids, 
@@ -73,8 +81,8 @@ if ($tids) {
     'reduce_duplicates' => 1,
     'group' => 0,
   );
-  $view->add_item('block', 'filter', 'taxonomy_index', 'tid', $options);
-  echo $view->preview('block');
+  $view->add_item($display, 'filter', 'taxonomy_index', 'tid', $options);
+  echo $view->preview($display);
 }
     
 ?>
