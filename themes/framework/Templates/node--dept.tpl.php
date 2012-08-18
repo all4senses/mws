@@ -115,8 +115,6 @@ if ($tids) {
   $options = array(
     'order' => $order,
     'id' => $id,
-    //'expose' => array('label' => $label),
-    //'relationship' => $relationship,
   );
   if ($relationship) {
     $options['relationship'] = $relationship;
@@ -131,12 +129,12 @@ if ($tids) {
     }
   }
   
-  $sort_options = array('title', 'price', 'date');
+  $sort_options = array('title' => 'Title', 'price' => 'Price', 'date' => 'Post date');
   $start_url = $_SERVER['REDIRECT_URL'] . $query . ($query ? '&' : '?');
   
   $sort_exposed = '';
   
-  foreach($sort_options as $sort_option) {
+  foreach($sort_options as $sort_option => $sort_title) {
     $order_marker = '';
     if ($sort_option == @$_GET['sort']) {
       if (!@$_GET['order'] || $_GET['order'] == 'DESC') {
@@ -151,27 +149,10 @@ if ($tids) {
     else {
       $current_order = 'ASC';
     }
-    $sort_exposed .= ' | <a href="' . $start_url . 'sort=' . $sort_option . '&order=' . $current_order . '">' . $sort_option . $order_marker . '</a>';
+    $sort_exposed .= ' | <a href="' . $start_url . 'sort=' . $sort_option . '&order=' . $current_order . '">' . $sort_title . $order_marker . '</a>';
   }
   
   echo $sort_exposed;
-  
-  
-  
-//  $order = 'ASC';
-//  $id = 'title';
-//  $table = 'node';
-//  $label = 'Title';
-//
-//  $options = array(
-//    'order' => $order,
-//    'id' => $id,
-//  );
-//  
-//  $view->add_item($display, 'sort', $table, $id, $options);
-// 
-//  
-  
   echo $view->preview($display);
 }
     
