@@ -1,0 +1,14 @@
+name = Commerce (bulk product creation)
+description = A UI and API which allow for the creation of related products in bulk
+package = Commerce (contrib)
+core = 7.x
+files[] = commerce_bpc.module
+files[] = commerce_bpc.test
+dependencies[] = commerce_product_ui
+
+; Information added by drupal.org packaging script on 2011-12-31
+version = "7.x-1.0-rc5"
+core = "7.x"
+project = "commerce_bpc"
+datestamp = "1325290883"
+
