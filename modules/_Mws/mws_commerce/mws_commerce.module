@@ -18,8 +18,27 @@ function mws_commerce_menu() {
     'type' => MENU_CALLBACK,
   ); 
 
+  $items['mws/catalog'] = array(
+    'title' => 'Test page',
+    'page callback' => 'mws_commerce_catalogPage',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  
   return $items;
   
+}
+
+
+/**
+ * Mws Catalog page.
+ */
+function mws_commerce_catalogPage() {
+  $out = '<div>catalog starts</div>';
+  
+  $out .= '<div>catalog ends</div>';
+  
+  return $out;
 }
 
 
@@ -32,6 +51,21 @@ function mws_commerce_testPage() {
   $out .= '<div>Test ends</div>';
   
   return $out;
+}
+
+
+/**
+ * Override or insert variables into the page template.
+ */
+function mws_commerce_process_page(&$variables) {
+//  dpm(arg());
+//  dpm($_GET);
+//  dpm($_SERVER);
+  dpm($variables);
+  
+  if (arg(0) == 'mws') {
+    $variables['theme_hook_suggestions'][] = 'page__url__mws';
+  }
 }
 
 
