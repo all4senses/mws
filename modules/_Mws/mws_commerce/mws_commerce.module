@@ -10,17 +10,30 @@
  * Implements hook_menu().
  */
 function mws_commerce_menu() {
- /*
-  $items['request'] = array(
-    'title' => 'Make a request',
-    'page callback' => 'mws_commerce_makeRequest_ajax',
-    'access arguments' => array('access content'),
+ 
+  $items['test'] = array(
+    'title' => 'Test page',
+    'page callback' => 'mws_commerce_testPage',
+    'access arguments' => array('administer content'),
     'type' => MENU_CALLBACK,
   ); 
 
   return $items;
-  */
+  
 }
+
+
+/**
+ * Test page.
+ */
+function mws_commerce_testPage() {
+  $out = '<div>Test starts</div>';
+  
+  $out .= '<div>Test ends</div>';
+  
+  return $out;
+}
+
 
 /**
  * Implements hook_token_info().
