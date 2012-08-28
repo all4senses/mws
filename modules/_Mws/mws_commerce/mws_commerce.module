@@ -53,25 +53,6 @@ function mws_commerce_tokens($type, $tokens, array $data = array(), array $optio
       switch ($name) {
         case 'node-term-siblings':
           
-          /*
-          if ($node->type == 'review') {
-            if (isset($node->field_ref_provider['und'][0]['target_id']) && $node->field_ref_provider['und'][0]['target_id']) {
-              
-              $query = db_select('node', 'n');
-              $query->join('field_data_field_p_name', 'pn', "pn.entity_id = n.nid"); 
-              //$query->fields('n', array('nid', 'title'))
-              $query->fields('pn', array('field_p_name_value'))
-                    ->condition('nid', $node->field_ref_provider['und'][0]['target_id']);
-              
-              $provider_title = $query->execute()->fetchField();
-              $replacements[$original] = $provider_title;
-            }
-            else {
-              $replacements[$original] = check_plain($node->field_r_oprovider['und'][0]['value']);
-            }
-
-          }
-          */
           $term_children = taxonomy_get_children($node->field_category['und'][0]['taxonomy_term']->tid, $node->field_category['und'][0]['taxonomy_term']->vid);
 
           $replacements[$original] = '';

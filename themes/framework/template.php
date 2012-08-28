@@ -50,6 +50,17 @@ function framework_menu_local_tasks(&$variables) {
   return $output;
 }
 
+
+/**
+ * Override or insert variables into the page template.
+ */
+function framework_process_page(&$variables) {
+  if(isset($variables['node'])) {
+    $variables['theme_hook_suggestions'][] = 'page__' . $variables['node']->type;
+  }
+}
+
+
 /**
  * Override or insert variables into the node template.
  */
