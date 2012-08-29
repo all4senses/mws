@@ -40,7 +40,7 @@ function mws_commerce_commerce_line_item_summary_link_info_alter(&$links) {
 //  dpm($_SERVER);
   $args = arg();
   dpm($args);
-  if ($args[0] == 'mws' || ($args[2] == 'views' && $args[4] == 'mws_shopping_cart')) {
+  if ($args[0] == 'mws' || ($args[2] == 'views' && ($args[4] == 'mws_shopping_cart' || $args[5] == 'mws_shopping_cart'))) {
     $links['view_cart']['href'] = 'mws/cart';
     $links['checkout']['href'] = 'mws/checkout';
   }
