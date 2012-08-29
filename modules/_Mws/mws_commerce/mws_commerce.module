@@ -61,7 +61,7 @@ function mws_commerce_process_page(&$variables) {
 //  dpm(arg());
 //  dpm($_GET);
 //  dpm($_SERVER);
-  dpm($variables);
+  //dpm($variables);
   
   if (arg(0) == 'mws') {
     $variables['theme_hook_suggestions'][] = 'page__url__mws';
