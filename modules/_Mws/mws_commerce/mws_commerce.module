@@ -19,7 +19,7 @@ function mws_commerce_menu() {
   ); 
 
   $items['mws/catalog'] = array(
-    'title' => 'Test page',
+    'title' => 'Mws catalog page',
     'page callback' => 'mws_commerce_catalogPage',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
