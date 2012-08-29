@@ -58,14 +58,23 @@ function mws_commerce_testPage() {
  * Override or insert variables into the page template.
  */
 function mws_commerce_process_page(&$variables) {
-//  dpm(arg());
-//  dpm($_GET);
-//  dpm($_SERVER);
-  //dpm($variables);
   
   if (arg(0) == 'mws') {
     $variables['theme_hook_suggestions'][] = 'page__url__mws';
   }
+}
+
+
+/*
+* Implementing of hook_theme_registry_alter
+*/
+function mws_commerce_theme_registry_alter(&$theme_registry) {
+  $theme_hook = 'page'; // my hook name
+  // Get the path to this module
+  $modulepath = drupal_get_path('module', 'mws_commerce');
+  // Add the module path on top in the array of paths
+  array_unshift($theme_registry[$theme_hook]['theme paths'], $modulepath);
+  // dsm($theme_registry[$theme_hook]['theme paths']);
 }
 
 

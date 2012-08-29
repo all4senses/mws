@@ -63,9 +63,7 @@ function framework_process_page(&$variables) {
   if(isset($variables['node'])) {
     $variables['theme_hook_suggestions'][] = 'page__' . $variables['node']->type;
   }
-//  elseif ($_GET['q'] == 'test') {
-//    $variables['theme_hook_suggestions'][] = 'page__url__mws';
-//  }
+
 }
 
 
