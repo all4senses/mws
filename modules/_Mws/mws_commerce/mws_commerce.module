@@ -60,6 +60,7 @@ function mws_commerce_testPage() {
 function mws_commerce_process_page(&$variables) {
   
   if (arg(0) == 'mws') {
+    module_invoke('admin_menu', 'suppress');
     $variables['theme_hook_suggestions'][] = 'page__url__mws';
   }
 }
