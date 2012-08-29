@@ -65,16 +65,29 @@ function mws_commerce_process_page(&$variables) {
 }
 
 
-/*
-* Implementing of hook_theme_registry_alter
-*/
+/**
+ * Implements hook_theme_registry_alter()
+**/
 function mws_commerce_theme_registry_alter(&$theme_registry) {
-  $theme_hook = 'page'; // my hook name
-  // Get the path to this module
-  $modulepath = drupal_get_path('module', 'mws_commerce');
-  // Add the module path on top in the array of paths
-  array_unshift($theme_registry[$theme_hook]['theme paths'], $modulepath);
-  // dsm($theme_registry[$theme_hook]['theme paths']);
+  $mod_path = drupal_get_path('module', 'mws_commerce');
+  $theme_registry_copy = $theme_registry;       // munge on a copy
+  _theme_process_registry($theme_registry_copy, 'phptemplate', 'theme_engine', 'pow', $mod_path);
+  $theme_registry += array_diff_key($theme_registry_copy, $theme_registry);
+  $hooks = array('page', 'node');
+  foreach ($hooks as $h) {
+    _mws_commerce_insert_after_first_element($theme_registry[$h]['theme paths'], $mod_path);
+  }
+}
+
+
+/**
+ * Helper function for re-ordering arrays (needed by theme_registry_alter)
+*/
+function _mws_commerce_insert_after_first_element(&$a, $element) {
+  if(is_array($a)) {
+    $first_element = array_shift($a);
+    array_unshift($a, $first_element, $element);
+  }
 }
 
 
