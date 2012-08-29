@@ -35,7 +35,7 @@ function mws_commerce_menu() {
  */
 function mws_commerce_catalogPage() {
   
-  $out .= '<div>catalog</div>';
+  $out = '<div>catalog</div>';
   
   $tids = array(3 => 3, 4 => 4);
   $display = 'block_products';
