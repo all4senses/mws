@@ -34,10 +34,15 @@ function mws_commerce_menu() {
  * Alter commerce_line_item_summary_link_info variable, defined in function commerce_line_item_summary_links()
  */
 function mws_commerce_commerce_line_item_summary_link_info_alter(&$links) {
-  dpm($links);
-  dpm($_GET);
-  dpm(arg());
-  dpm($_SERVER);
+//  dpm($links);
+//  dpm($_GET);
+//  dpm(arg());
+//  dpm($_SERVER);
+  $args = arg();
+  if ($args[0] == 'mws' || ($args[2] == 'views' && $args[4] == 'mws_shopping_cart')) {
+    $links['view_cart']['href'] = 'mws/cart';
+    $links['checkout']['href'] = 'mws/checkout';
+  }
 }
 
 
