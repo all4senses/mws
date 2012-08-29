@@ -37,6 +37,9 @@ function mws_commerce_catalogPage() {
   
   $out = '<div>catalog</div>';
   
+  $block_data = array('module' => 'views', 'delta' => 'mws_cart_block');
+  $out .= mws_commerce_getBlockThemed($block_data);
+  
   $tids = array(3 => 3, 4 => 4);
   $display = 'block_products';
  
@@ -52,7 +55,7 @@ function mws_commerce_catalogPage() {
   );
   $view->add_item($display, 'filter', 'taxonomy_index', 'tid', $options);
 
-  $out = $view->preview($display);
+  $out .= $view->preview($display);
   
   return $out;
 }
@@ -152,4 +155,42 @@ function mws_commerce_tokens($type, $tokens, array $data = array(), array $optio
   }
   
   return $replacements;
+}
+
+
+/**
+ * Wrap a block content in proper block's divs.
+ */
+function mws_commerce_wrapInBlockThemed($block_data, $block)
+{
+  if(!isset($block['content']) || !$block['content']) {
+      return null;
+  }
+  if (is_array($block['content'])) {
+    $block['content'] = render($block);
+  }
+  
+    return 
+      '<section id="block-' . $block_data['module'] . '-' . $block_data['delta'] . '" class="block gv block-' . $block_data['module'] . '">' 
+         . ( ($block['subject'] && (!isset($block_data['subject_visible']) || $block_data['subject_visible']) )
+            ? 
+            '<div class="block-icon pngfix"></div><h2 class="block-title">' . $block['subject'] . '</h2>'
+            :
+            '') 
+         . '<div class="content">' . $block['content'] . '</div>
+      </section>';
+  
+}
+
+
+/**
+ * Returns a content of a block wrapped in proper divs.
+ */
+function mws_commerce_getBlockThemed($block_data)
+{
+  $block = module_invoke($block_data['module'], 'block_view', $block_data['delta']);
+  if ($block) {
+    return mws_commerce_wrapInBlockThemed($block_data, $block);
+  }
+  return NULL;
 }
