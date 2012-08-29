@@ -35,6 +35,9 @@ function mws_commerce_menu() {
  */
 function mws_commerce_commerce_line_item_summary_link_info_alter(&$links) {
   dpm($links);
+  dpm($_GET);
+  dpm(arg());
+  dpm($_SERVER);
 }
 
 

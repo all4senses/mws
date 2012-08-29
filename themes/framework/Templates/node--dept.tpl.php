@@ -54,7 +54,7 @@ $tids = NULL;
 foreach($term_children as $term_child) {
   $tids[$term_child->tid] = $term_child->tid;
 }
-dpm($tids);
+
 if ($tids) {
   $child = NULL;
   foreach ($tids as $tid) {
