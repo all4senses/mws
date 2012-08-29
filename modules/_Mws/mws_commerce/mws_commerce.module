@@ -31,6 +31,14 @@ function mws_commerce_menu() {
 
 
 /**
+ * Alter commerce_line_item_summary_link_info variable, defined in function commerce_line_item_summary_links()
+ */
+function mws_commerce_commerce_line_item_summary_link_info_alter(&$links) {
+  dpm($links);
+}
+
+
+/**
  * Mws Catalog page.
  */
 function mws_commerce_catalogPage() {
