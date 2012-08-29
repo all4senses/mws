@@ -34,9 +34,25 @@ function mws_commerce_menu() {
  * Mws Catalog page.
  */
 function mws_commerce_catalogPage() {
-  $out = '<div>catalog starts</div>';
   
-  $out .= '<div>catalog ends</div>';
+  $out .= '<div>catalog</div>';
+  
+  $tids = array(3 => 3, 4 => 4);
+  $display = 'block_products';
+ 
+  $view = views_get_view('catalog_node_siblings');
+  $options = array(
+    'id' => 'tid',
+    'value' => $tids, 
+    'type' => 'select',
+    'vid' =>  'catalog',
+    'hierarchy' => 1,
+    'reduce_duplicates' => 1,
+    'group' => 0,
+  );
+  $view->add_item($display, 'filter', 'taxonomy_index', 'tid', $options);
+
+  $out = $view->preview($display);
   
   return $out;
 }
