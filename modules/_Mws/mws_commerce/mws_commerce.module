@@ -37,8 +37,11 @@ function mws_commerce_catalogPage() {
   
   $out = '<div>catalog</div>';
   
-  $block_data = array('module' => 'views', 'delta' => 'mws_cart_block');
-  $out .= mws_commerce_getBlockThemed($block_data);
+  //$block_data = array('module' => 'views', 'delta' => 'mws_cart_block');
+  //$out .= mws_commerce_getBlockThemed($block_data);
+  
+  $view = views_get_view('mws_shopping_cart');
+  $out .= $view->preview('mws_cart_block');
   
   $tids = array(3 => 3, 4 => 4);
   $display = 'block_products';
@@ -189,7 +192,7 @@ function mws_commerce_wrapInBlockThemed($block_data, $block)
 function mws_commerce_getBlockThemed($block_data)
 {
   $block = module_invoke($block_data['module'], 'block_view', $block_data['delta']);
-  dpm($block);
+  //dpm($block);
   if ($block) {
     return mws_commerce_wrapInBlockThemed($block_data, $block);
   }
