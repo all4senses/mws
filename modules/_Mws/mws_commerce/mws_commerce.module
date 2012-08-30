@@ -114,7 +114,7 @@ function mws_commerce_catalogPage() {
 /**
  * Implements hook_form_alter().
  */
-function commerce_cart_form_alter(&$form, &$form_state, $form_id) {
+function mws_commerce_form_alter(&$form, &$form_state, $form_id) {
   dpm($form_id);
 }
 
