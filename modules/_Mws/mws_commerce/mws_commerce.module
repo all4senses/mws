@@ -25,6 +25,30 @@ function mws_commerce_menu() {
     'type' => MENU_CALLBACK,
   );
   
+  
+  $items['cart'] = array(
+    'title' => 'Shopping cart',
+    'page callback' => 'mws_commerce_cart_view',
+    'access arguments' => array('access content'),
+  );
+
+ /* 
+  $items['cart/my'] = array(
+    'title' => 'Shopping cart (# items)',
+    'title callback' => 'commerce_cart_menu_item_title',
+    'title arguments' => array(TRUE),
+    'page callback' => 'commerce_cart_menu_item_redirect',
+    'access arguments' => array('access content'),
+    'type' => MENU_SUGGESTED_ITEM,
+  );
+*/
+  $items['checkout'] = array(
+    'title' => 'Checkout',
+    'page callback' => 'mws_commerce_checkout_router',
+    'access arguments' => array('access checkout'),
+    'type' => MENU_CALLBACK,
+  );
+  
   return $items;
   
 }
@@ -75,6 +99,9 @@ function mws_commerce_catalogPage() {
         $total = commerce_line_items_total($wrapper->commerce_line_items);
         $currency = commerce_currency_load($total['currency_code']);
         $cart_block = '<span>Qty: </span><span>' . $quantity . ' ' . format_plural($quantity, 'item', 'items', array(), array('context' => 'product count on a Commerce order')) . '</span><span>Total: </span><span>' . commerce_currency_format($total['amount'], $total['currency_code']) . '</span><span>' . l('View Cart', 'mws/cart') . '</span><span>' . l('Checkout', 'mws/checkout') . '</span>';
+        // Full block with the list of products.
+        //$cart_block = commerce_embed_view('mws_shopping_cart', 'block', array($order->order_id));
+
       }
   }
   
@@ -84,10 +111,7 @@ function mws_commerce_catalogPage() {
   //$block_data = array('module' => 'views', 'delta' => 'mws_cart_block');
   //$out .= mws_commerce_getBlockThemed($block_data);
   
-  // Works, but we don't really need here a block with the full list of items.
-  //$view = views_get_view('mws_shopping_cart');
-  //$out .= $view->preview('mws_cart_block');
-  
+
   
   // Render a list of products.
   $tids = array(3 => 3, 4 => 4);
@@ -125,7 +149,7 @@ function mws_commerce_catalogPage() {
 //function commerce_cart_form_alter(&$form, &$form_state, $form_id) {
 function mws_commerce_form_alter(&$form, &$form_state, $form_id) {
   //if (strpos($form_id, 'views_form_commerce_cart_form_') === 0) {
-  if (strpos($form_id, 'views_form_mws_shopping_cart_page_') === 0) {
+  if (strpos($form_id, 'views_form_mws_shopping_cart_form') === 0) {
     // Only alter buttons if the cart form View shows line items.
     $view = reset($form_state['build_info']['args']);
 
@@ -158,7 +182,7 @@ function mws_commerce_form_alter(&$form, &$form_state, $form_id) {
         '#weight' => 5,
         '#access' => user_access('access checkout'),
         //'#submit' => array_merge($form['#submit'], array('commerce_checkout_line_item_views_form_submit')),
-        '#submit' => array_merge($form['#submit'], array('wms_line_item_views_form_submit')),
+        '#submit' => array_merge($form['#submit'], array('mws_commerce_line_item_views_form_submit')),
       );
       
     }
@@ -180,12 +204,11 @@ function mws_commerce_form_alter(&$form, &$form_state, $form_id) {
 //    }
 //  }
   //elseif (strpos($form_id, 'views_form_commerce_cart_block') === 0) {
-  elseif (strpos($form_id, 'views_form_mws_shopping_cart_page') === 0) {
+  elseif (strpos($form_id, 'views_form_mws_shopping_cart_block') === 0) {
     // No point in having a "Save" button on the shopping cart block.
     unset($form['actions']);
   }
 }
-
 
 
 /**
@@ -349,4 +372,58 @@ function mws_commerce_getBlockThemed($block_data)
     return mws_commerce_wrapInBlockThemed($block_data, $block);
   }
   return NULL;
+}
+
+
+/**
+ * A code from commerce_cart.pages.inc
+ * 
+ * Redirects invalid checkout attempts or displays the checkout form if valid.
+ */
+function mws_commerce_checkout_router() {
+  global $user;
+
+  // Load the shopping cart order.
+  if ($order = commerce_cart_order_load($user->uid)) {
+    $wrapper = entity_metadata_wrapper('commerce_order', $order);
+  }
+
+  // If no shopping cart order could be found, redirect away from checkout.
+  // TODO: Redirect to the cart page instead which would then appear as an
+  // empty shopping cart page.
+  if (empty($order) || commerce_line_items_quantity($wrapper->commerce_line_items, commerce_product_line_item_types()) == 0) {
+    drupal_set_message(t('Add some items to your cart and then try checking out.'));
+    //drupal_goto(variable_get('commerce_checkout_empty_redirect', ''));
+    // TODO: Mws - this var not yet defined by a4s...
+    drupal_goto(variable_get('mws_commerce_checkout_empty_redirect', ''));
+  }
+
+  //drupal_goto('checkout/' . $order->order_id);
+  drupal_goto('mws/checkout/' . $order->order_id);
+}
+
+/**
+ * Displays the shopping cart form and associated information.
+ */
+//function commerce_cart_view() {
+function mws_commerce_cart_view() {
+  global $user;
+
+  // Default to displaying an empty message.
+  $content = theme('commerce_cart_empty_page');
+
+  // First check to make sure we have a valid order.
+  if ($order = commerce_cart_order_load($user->uid)) {
+    $wrapper = entity_metadata_wrapper('commerce_order', $order);
+
+    // Only show the cart form if we found product line items.
+    if (commerce_line_items_quantity($wrapper->commerce_line_items, commerce_product_line_item_types()) > 0) {
+
+      // Add the form for editing the cart contents.
+      //$content = commerce_embed_view('commerce_cart_form', 'default', array($order->order_id), 'cart');
+      $content = commerce_embed_view('mws_shopping_cart', 'form', array($order->order_id), 'cart');
+    }
+  }
+
+  return $content;
 }
