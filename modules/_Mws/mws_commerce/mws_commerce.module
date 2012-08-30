@@ -74,6 +74,8 @@ function mws_commerce_catalogPage() {
       }
   }
   
+  $out .= '<div>' . $cart_block . '</div>';
+  
   $view = views_get_view('mws_shopping_cart');
   $out .= $view->preview('mws_cart_block');
   
