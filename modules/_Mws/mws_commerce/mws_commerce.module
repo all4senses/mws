@@ -58,6 +58,22 @@ function mws_commerce_catalogPage() {
   //$block_data = array('module' => 'views', 'delta' => 'mws_cart_block');
   //$out .= mws_commerce_getBlockThemed($block_data);
   
+  $cart_block = 'Your cart is empty';
+  if ($order = commerce_cart_order_load($user->uid)) {
+      $wrapper = entity_metadata_wrapper('commerce_order', $order);
+
+      // If there are one or more products in the cart...
+      if ($quantity = commerce_line_items_quantity($wrapper->commerce_line_items, commerce_product_line_item_types()) > 0) {
+        
+        $total = commerce_line_items_total($wrapper->commerce_line_items);
+        dpm($total);
+        $currency = commerce_currency_load($total['currency_code']);
+        dpm($currency);
+        
+        $cart_block = 'Cart, Checkout links';
+      }
+  }
+  
   $view = views_get_view('mws_shopping_cart');
   $out .= $view->preview('mws_cart_block');
   
