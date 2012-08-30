@@ -54,7 +54,7 @@ function mws_commerce_commerce_line_item_summary_link_info_alter(&$links) {
 function mws_commerce_catalogPage() {
   
   global $user;
-  $out = '<div>catalog</div>';
+  $out = NULL;
   
   //$block_data = array('module' => 'views', 'delta' => 'mws_cart_block');
   //$out .= mws_commerce_getBlockThemed($block_data);
@@ -67,11 +67,8 @@ function mws_commerce_catalogPage() {
       if ($quantity = commerce_line_items_quantity($wrapper->commerce_line_items, commerce_product_line_item_types()) > 0) {
         
         $total = commerce_line_items_total($wrapper->commerce_line_items);
-        dpm($total);
         $currency = commerce_currency_load($total['currency_code']);
-        dpm($currency);
-        
-        $cart_block = 'Cart, Checkout links';
+        $cart_block = '<span>Qty: </span><span>' . $quantity . ' ' . format_plural($quantity, 'item', 'items', array(), array('context' => 'product count on a Commerce order')) . '</span><span>Total: </span><span>' . commerce_currency_format($total['amount'], $total['currency_code']) . '</span><span>' . l('View Cart', 'mws/cart') . '</span><span>' . l('Checkout', 'mws/checkout') . '</span>';
       }
   }
   
