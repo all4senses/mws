@@ -85,8 +85,8 @@ function mws_commerce_catalogPage() {
   //$out .= mws_commerce_getBlockThemed($block_data);
   
   // Works, but we don't really need here a block with the full list of items.
-  $view = views_get_view('mws_shopping_cart');
-  $out .= $view->preview('mws_cart_block');
+  //$view = views_get_view('mws_shopping_cart');
+  //$out .= $view->preview('mws_cart_block');
   
   
   // Render a list of products.
@@ -110,6 +110,13 @@ function mws_commerce_catalogPage() {
   return $out;
 }
 
+
+/**
+ * Implements hook_form_alter().
+ */
+function commerce_cart_form_alter(&$form, &$form_state, $form_id) {
+  dpm($form_id);
+}
 
 /**
  * Test page.
