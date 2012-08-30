@@ -33,7 +33,7 @@ function mws_commerce_menu() {
 /**
  * Alter commerce_line_item_summary_link_info variable, defined in function commerce_line_item_summary_links()
  * 
- * Replace default url of cart and checkout to redefined ones.
+ * Replace default url of cart and checkout to redefined ones for a Mws cart block.
  */
 function mws_commerce_commerce_line_item_summary_link_info_alter(&$links) {
   $args = arg();
@@ -56,9 +56,15 @@ function mws_commerce_catalogPage() {
   global $user;
   $out = NULL;
   
-  //$block_data = array('module' => 'views', 'delta' => 'mws_cart_block');
-  //$out .= mws_commerce_getBlockThemed($block_data);
-  
+  // Cart block/link.
+  // The code was taken from:
+  // class commerce_line_item_handler_area_line_item_summary extends views_handler_area {
+  // and its function render($empty = FALSE)
+  // 
+  // Also from here:
+  // function commerce_cart_block_view($delta) {
+  //
+  // And a bit from here:   commerce_line_item_theme()
   $cart_block = 'Your cart is empty';
   if ($order = commerce_cart_order_load($user->uid)) {
       $wrapper = entity_metadata_wrapper('commerce_order', $order);
@@ -74,9 +80,16 @@ function mws_commerce_catalogPage() {
   
   $out .= '<div>' . $cart_block . '</div>';
   
-  //$view = views_get_view('mws_shopping_cart');
-  //$out .= $view->preview('mws_cart_block');
+  // Doesn't work.
+  //$block_data = array('module' => 'views', 'delta' => 'mws_cart_block');
+  //$out .= mws_commerce_getBlockThemed($block_data);
   
+  // Works, but we don't really need here a block with the full list of items.
+  $view = views_get_view('mws_shopping_cart');
+  $out .= $view->preview('mws_cart_block');
+  
+  
+  // Render a list of products.
   $tids = array(3 => 3, 4 => 4);
   $display = 'block_products';
  
