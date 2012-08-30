@@ -53,6 +53,7 @@ function mws_commerce_commerce_line_item_summary_link_info_alter(&$links) {
  */
 function mws_commerce_catalogPage() {
   
+  global $user;
   $out = '<div>catalog</div>';
   
   //$block_data = array('module' => 'views', 'delta' => 'mws_cart_block');
