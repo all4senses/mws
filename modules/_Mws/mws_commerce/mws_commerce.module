@@ -37,7 +37,7 @@ function mws_commerce_menu() {
  */
 function mws_commerce_commerce_line_item_summary_link_info_alter(&$links) {
   $args = arg();
-  if ($args[0] == 'mws' || ($args[2] == 'views' && ($args[4] == 'mws_shopping_cart' || $args[5] == 'mws_shopping_cart'))) {
+  if (@$args[0] == 'mws' || (@$args[2] == 'views' && (@$args[4] == 'mws_shopping_cart' || @$args[5] == 'mws_shopping_cart'))) {
     if (isset($links['view_cart'])) {
       $links['view_cart']['href'] = 'mws/cart';
     }
