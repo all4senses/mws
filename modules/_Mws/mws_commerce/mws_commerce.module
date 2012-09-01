@@ -688,11 +688,13 @@ function mws_commerce_checkout_router($order, $checkout_page = NULL) {
  */
 function mws_commerce_node_view($node, $view_mode) {
 
+  dpm($node);
+  
   switch ($node->type) {
     
     default:
       
-      dpm($node);
+      
       
       break;
     
