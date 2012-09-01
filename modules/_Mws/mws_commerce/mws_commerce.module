@@ -73,6 +73,43 @@ function mws_commerce_commerce_line_item_summary_link_info_alter(&$links) {
 
 
 /**
+ * Implements hook_rules_action_info_alter.
+ * 
+ * Replaces cart link url to mws/cart in the resulting massage after adding a product to the cart.
+ */
+function hook_rules_action_info_alter(&$actions) {
+  
+  // Original code for the action from function commerce_cart_rules_action_info() 
+  /*
+  $actions['commerce_cart_add_to_cart_message'] = array(
+    'label' => t('Display a translatable Add to Cart message'),
+    'parameter' => array(
+      'commerce_product' => array(
+        'type' => 'commerce_product',
+        'label' => t('Product added to the cart'),
+      ),
+    ),
+    'group' => t('Commerce Cart'),
+    'callbacks' => array(
+      'execute' => 'commerce_cart_rules_add_to_cart_message',
+    ),
+  );
+  */
+  
+  // Override with own callback.
+  $actions['commerce_cart_add_to_cart_message']['callbacks']['execute'] = 'mws_commerce_rules_add_to_cart_message';
+}
+
+
+/**
+ * Override callback for Rules action: displays a the default translatable Add to Cart message.
+ */
+function mws_commerce_rules_add_to_cart_message($product) {
+  drupal_set_message(t('%title added to <a href="!cart-url">your cart</a>.', array('%title' => $product->title, '!cart-url' => url('mws/cart'))));
+}
+
+
+/**
  * Mws Catalog page.
  */
 function mws_commerce_catalogPage() {
