@@ -391,9 +391,9 @@ function mws_commerce_checkout_form_cancel_submit($form, &$form_state) {
   drupal_set_message(t('Checkout of your current order has been canceled and may be resumed when you are ready.'));
   */
   
-  if (isset($form_state['redirect'])) {
-    $form_state['redirect'] = 'mws/catalog'; //$form_state['cancel_redirect'];
-  }
+  
+    $form_state['redirect'] = $form_state['cancel_redirect']; // 'mws/catalog';
+  
 }
 
 
