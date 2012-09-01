@@ -77,7 +77,7 @@ function mws_commerce_commerce_line_item_summary_link_info_alter(&$links) {
  * 
  * Replaces cart link url to mws/cart in the resulting massage after adding a product to the cart.
  */
-function hook_rules_action_info_alter(&$actions) {
+function mws_commerce_rules_action_info_alter(&$actions) {
   
   // Original code for the action from function commerce_cart_rules_action_info() 
   /*
