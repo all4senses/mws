@@ -453,6 +453,17 @@ function mws_commerce_process_page(&$variables) {
 
 
 /**
+ * Override or insert variables into the node template.
+ */
+function mws_commerce_process_node(&$variables) {
+  
+  if (arg(0) == 'mws') {
+    dpm($variables);
+  }
+}
+
+
+/**
  * Implements hook_theme_registry_alter()
 **/
 function mws_commerce_theme_registry_alter(&$theme_registry) {
