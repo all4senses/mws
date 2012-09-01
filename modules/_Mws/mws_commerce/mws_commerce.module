@@ -131,7 +131,7 @@ function mws_commerce_catalogPage() {
       $wrapper = entity_metadata_wrapper('commerce_order', $order);
 
       // If there are one or more products in the cart...
-      if ($quantity = commerce_line_items_quantity($wrapper->commerce_line_items, commerce_product_line_item_types()) > 0) {
+      if (($quantity = commerce_line_items_quantity($wrapper->commerce_line_items, commerce_product_line_item_types())) > 0) {
         
         $total = commerce_line_items_total($wrapper->commerce_line_items);
         $currency = commerce_currency_load($total['currency_code']);
