@@ -277,6 +277,8 @@ function mws_commerce_form_alter(&$form, &$form_state, $form_id) {
       $form['buttons']['back']['#submit'][] = 'mws_commerce_checkout_form_back_submit';
     }
     
+    dpm($form);
+    
    } // End of if (isset($form['buttons'])) {
     
   } // End of if (strpos($form_id, 'commerce_checkout_form_') === 0) {
