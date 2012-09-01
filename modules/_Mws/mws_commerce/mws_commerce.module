@@ -392,7 +392,7 @@ function mws_commerce_checkout_form_cancel_submit($form, &$form_state) {
   */
   
   if (isset($form_state['redirect'])) {
-    $form_state['redirect'] = $form_state['cancel_redirect'];
+    $form_state['redirect'] = 'mws/catalog'; //$form_state['cancel_redirect'];
   }
 }
 
