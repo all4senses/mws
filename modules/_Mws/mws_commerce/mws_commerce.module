@@ -52,14 +52,14 @@ function mws_commerce_menu() {
   $items['mws/checkout/%commerce_order'] = array(
     'title' => 'Checkout',
     'page callback' => 'mws_commerce_checkout_router',
-    'page arguments' => array(1),
+    'page arguments' => array(2),
     'access arguments' => array('access checkout'),
     'type' => MENU_CALLBACK,
   );
   $items['mws/checkout/%commerce_order/%commerce_checkout_page'] = array(
     'title' => 'Checkout',
     'page callback' => 'mws_commerce_checkout_router',
-    'page arguments' => array(1, 2),
+    'page arguments' => array(2, 3),
     'access arguments' => array('access checkout'),
     'type' => MENU_CALLBACK,
   );   
