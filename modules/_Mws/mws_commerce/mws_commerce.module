@@ -112,7 +112,10 @@ function mws_commerce_rules_action_info_alter(&$actions) {
   */
   
   // Override with own callback.
-  $actions['commerce_cart_add_to_cart_message']['callbacks']['execute'] = 'mws_commerce_rules_add_to_cart_message';
+  $args = arg();
+  if (@$args[0] == 'mws') {
+    $actions['commerce_cart_add_to_cart_message']['callbacks']['execute'] = 'mws_commerce_rules_add_to_cart_message';
+  }
 }
 
 
@@ -392,7 +395,7 @@ function mws_commerce_checkout_form_cancel_submit($form, &$form_state) {
   */
   
   
-    $form_state['redirect'] = $form_state['cancel_redirect']; // 'mws/catalog';
+    $form_state['redirect'] = $form_state['cancel_redirect']; 
   
 }
 
@@ -676,3 +679,22 @@ function mws_commerce_checkout_router($order, $checkout_page = NULL) {
   return drupal_get_form('commerce_checkout_form_' . $checkout_page['page_id'], $order, $checkout_page);
 }
 
+
+/**
+ * Implements hook_node_view().
+ *
+ * @return void
+ *   Return nothing.
+ */
+function mws_commerce_node_view($node, $view_mode) {
+
+  switch ($node->type) {
+    
+    default:
+      
+      dpm($node);
+      
+      break;
+    
+  }
+}
