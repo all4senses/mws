@@ -274,7 +274,7 @@ function mws_commerce_form_alter(&$form, &$form_state, $form_id) {
     }
     
     if (isset($form['buttons']['cancel'])) {
-      $form['buttons']['cancel']['#submit'] = array('mws_commerce_checkout_form_cancel_submit');
+      $form['buttons']['cancel']['#submit'][] = array('mws_commerce_checkout_form_cancel_submit');
     }
     
     if (isset($form['buttons']['back'])) {
