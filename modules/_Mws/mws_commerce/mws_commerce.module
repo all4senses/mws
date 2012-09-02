@@ -11,6 +11,13 @@
  */
 function mws_commerce_menu() {
  
+  $items['mws.js'] = array(
+    'title' => 'Test page',
+    'page callback' => 'mws_commerce_loadingJs',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  
   $items['test'] = array(
     'title' => 'Test page',
     'page callback' => 'mws_commerce_testPage',
@@ -66,6 +73,13 @@ function mws_commerce_menu() {
   
   return $items;
   
+}
+
+
+function mws_commerce_loadingJs() {
+  
+  drupal_add_http_header('Content-Type', 'text/javascript');
+  echo '<SCRIPT>alert("Test!");</SCRIPT>';
 }
 
 
