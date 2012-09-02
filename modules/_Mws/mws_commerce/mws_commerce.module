@@ -474,7 +474,7 @@ function mws_commerce_process_node(&$variables) {
   // Redirect product node page to a separate mws link... to show only a product node, without other site's template elements.
   if (@arg(0) == 'mws' && @arg(1) == 'catalog') {
     dpm($variables);
-    if ($variables['teaset'] && isset($variables['field_product'])) {
+    if ($variables['teaser'] && isset($variables['field_product'])) {
       $variables['node_url'] = 'mws/catalog?l=' . $variables['node_url'];
       // Now to show the product at 'mws/products?l=' . $variables['node_url'] we need to get a link, transform it to a nid and get and show the node page
       dpm($variables);
