@@ -255,6 +255,7 @@ function mws_commerce_form_alter(&$form, &$form_state, $form_id) {
       
       
       // A code from function commerce_checkout_form_alter(&$form, &$form_state, $form_id) {
+      /*
       $form['actions']['checkout'] = array(
         '#type' => 'submit',
         '#value' => t('Checkout'),
@@ -262,6 +263,11 @@ function mws_commerce_form_alter(&$form, &$form_state, $form_id) {
         '#access' => user_access('access checkout'),
         //'#submit' => array_merge($form['#submit'], array('commerce_checkout_line_item_views_form_submit')),
         '#submit' => array_merge($form['#submit'], array('mws_commerce_line_item_views_form_submit')),
+      );
+      */
+      $form['actions']['cancel'] = array(
+        '#markup' => l('Cancel', 'mws/catalog'),
+        '#weight' => 5,
       );
       
     }
