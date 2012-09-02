@@ -475,7 +475,7 @@ function mws_commerce_process_node(&$variables) {
   if (@arg(0) == 'mws' && @arg(1) == 'catalog') {
     dpm($variables);
     if ($variables['teaser'] && isset($variables['field_product'])) {
-      $variables['node_url'] = 'mws/catalog?l=' . $variables['node_url'];
+      $variables['node_url'] = '/mws/catalog?l=' . ltrim($variables['node_url'], '/');
       // Now to show the product at 'mws/products?l=' . $variables['node_url'] we need to get a link, transform it to a nid and get and show the node page
       dpm($variables);
     }
