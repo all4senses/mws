@@ -171,7 +171,7 @@ function mws_commerce_catalogPage() {
   if (@$_GET['l']) {
     
     // Add a link to the catalog.
-    $out .= '<span>' . l('Catalog', 'mws/catalog') . '</span>';
+    $out = '<span>' . l('Catalog', 'mws/catalog') . '</span>' . $out;
 
     // Show a product page
     if (is_numeric($nid = str_replace('node/', '', $_GET['l'])) || ($nid = str_replace('node/', '', drupal_lookup_path('source', $_GET['l']))) ) {
@@ -308,9 +308,6 @@ function mws_commerce_form_alter(&$form, &$form_state, $form_id) {
       //$form['buttons']['back']['#submit'] = array('commerce_checkout_form_back_submit');
       $form['buttons']['back']['#submit'][] = 'mws_commerce_checkout_form_back_submit';
     }
-    
-    dpm($form_state);
-    dpm($form);
     
    } // End of if (isset($form['buttons'])) {
     
@@ -483,11 +480,9 @@ function mws_commerce_process_node(&$variables) {
   
   // Redirect product node page to a separate mws link... to show only a product node, without other site's template elements.
   if (@arg(0) == 'mws' && @arg(1) == 'catalog') {
-    dpm($variables);
     if ($variables['teaser'] && isset($variables['field_product'])) {
       $variables['node_url'] = '/mws/catalog?l=' . ltrim($variables['node_url'], '/');
       // Now to show the product at 'mws/products?l=' . $variables['node_url'] we need to get a link, transform it to a nid and get and show the node page
-      dpm($variables);
     }
   }
 }
@@ -728,16 +723,11 @@ function mws_commerce_checkout_router($order, $checkout_page = NULL) {
  *   Return nothing.
  */
 function mws_commerce_node_view($node, $view_mode) {
-
-  dpm($node);
-  
+ 
   switch ($node->type) {
     
     default:
-      
-      
-      
+     
       break;
-    
   }
 }
