@@ -4,9 +4,8 @@
     attach: function (context, settings) {
        
        $(".checkout_to_original").click(function(event){
-         var quit = prompt('checkout_to_original?');
-         if (!quit) {
-          //alert('checkout_to_original');
+         var cancel = confirm('You will be redirected to the shop site. Do you want to edit the cart before we proceed?');
+         if (cancel) {
           event.preventDefault();
          }
        });
