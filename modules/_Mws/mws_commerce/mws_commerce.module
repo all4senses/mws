@@ -139,8 +139,7 @@ function mws_commerce_catalogPage() {
     // Show a product page
     if (is_numeric($nid = str_replace('node/', '', $_GET['l'])) || ($nid = str_replace('node/', '', drupal_lookup_path('source', $_GET['l']))) ) {
       $node = node_load($nid);
-      $out = node_view($node, 'page');
-      dpm($out);
+      $out .= render(node_view($node, 'page'));
     }
     else {
       $out .= 'No such product found';
