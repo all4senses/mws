@@ -460,6 +460,9 @@ function mws_commerce_line_item_views_form_submit($form, &$form_state) {
         'attributes' => array(
           'target' => '_blank',
         ),
+        'query' => array(
+          'a' => 'b',
+        ),
       ),
     );
      
