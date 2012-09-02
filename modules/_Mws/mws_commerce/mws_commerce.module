@@ -493,7 +493,9 @@ function mws_commerce_process_page(&$variables) {
     module_invoke('admin_menu', 'suppress');
     $variables['theme_hook_suggestions'][] = 'page__url__mws';
     
-    
+    $path_to_custom_js = drupal_get_path('module', 'mws_commerce') . '/js/';
+    drupal_add_js($path_to_custom_js . 'checkout-prompt.js');
+  
   }
 }
 
@@ -517,7 +519,7 @@ function mws_commerce_process_node(&$variables) {
  * Implements hook_theme_registry_alter()
 **/
 function mws_commerce_theme_registry_alter(&$theme_registry) {
-  $mod_path = drupal_get_path('module', 'mws_commerce');
+  $mod_path = drupal_get_path('module', 'mws_commerce') . '/templates';
   $theme_registry_copy = $theme_registry;       // munge on a copy
   _theme_process_registry($theme_registry_copy, 'phptemplate', 'theme_engine', 'pow', $mod_path);
   $theme_registry += array_diff_key($theme_registry_copy, $theme_registry);
