@@ -87,7 +87,6 @@ function mws_commerce_getShopUrl_ajax() {
   $status = TRUE;
   $output = '';
   
-  //$post = $_POST;
   $post = array();
   foreach ($_POST as $key => $value) {
     $post[$key] = check_plain(strip_tags($value));
@@ -107,7 +106,9 @@ function mws_commerce_loadingJs() {
   print <<<END
 
  function getShopUrl(){
-
+ 
+    console.log('in getShopUrl...');
+    
     (jQuery).ajax({
             
         url: '/getshopurl', 
@@ -132,6 +133,9 @@ function mws_commerce_loadingJs() {
 
 //doesnt block the load event
 function createIframe(shopUrl){
+  
+  console.log(' in createIframe');
+  
   var i = document.createElement("iframe");
   i.src = shopUrl; //"http://mws.all4senses.com/mws/catalog"
   i.scrolling = "auto";
