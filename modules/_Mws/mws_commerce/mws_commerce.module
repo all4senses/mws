@@ -153,7 +153,7 @@ function mws_commerce_catalogPage() {
 
         $total = commerce_line_items_total($wrapper->commerce_line_items);
         $currency = commerce_currency_load($total['currency_code']);
-        $cart_block = '<span>Qty: </span><span>' . $quantity . ' ' . format_plural($quantity, 'item', 'items', array(), array('context' => 'product count on a Commerce order')) . '</span><span>Total: </span><span>' . commerce_currency_format($total['amount'], $total['currency_code']) . '</span><span>' . l('View Cart', 'mws/cart') . '</span><span>' . l('Checkout', 'mws/checkout') . '</span>';
+        $cart_block = '<span>Qty: </span><span>' . $quantity . ' ' . format_plural($quantity, 'item', 'items', array(), array('context' => 'product count on a Commerce order')) . '</span><span>Total: </span><span>' . commerce_currency_format($total['amount'], $total['currency_code']) . '</span><span>' . l('View Cart', 'mws/cart') . '</span><span>' . l('Checkout', 'mws/checkout', array('attributes' => array('target' => '_blank'))) . '</span>';
         // Full block with the list of products.
         //$cart_block = commerce_embed_view('mws_shopping_cart', 'block', array($order->order_id));
 
