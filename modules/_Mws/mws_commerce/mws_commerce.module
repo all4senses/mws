@@ -79,7 +79,7 @@ function mws_commerce_menu() {
 function mws_commerce_loadingJs() {
   
   drupal_add_http_header('Content-Type', 'text/javascript');
-  echo '<SCRIPT>alert("Test!");</SCRIPT>';
+  echo 'alert("Test!");';
 }
 
 
