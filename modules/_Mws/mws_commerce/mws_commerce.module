@@ -453,20 +453,19 @@ function mws_commerce_line_item_views_form_submit($form, &$form_state) {
     
     // a4s
     ////$form_state['redirect'] = 'mws/checkout/' . $order->order_id;
-    
+    // Open in a new window doesn't work!
     $form_state['redirect'] = array(
       'checkout/' . $order->order_id,
       array(
         'attributes' => array(
           'target' => '_blank',
         ),
-        'query' => array(
-          'a' => 'b',
-        ),
       ),
     );
      
   }
+  
+  drupal_goto('checkout', array('attributes' => array('target' => '_blank')));
 }
 
 
