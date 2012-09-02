@@ -78,8 +78,30 @@ function mws_commerce_menu() {
 
 function mws_commerce_loadingJs() {
   
+  $out = '
+    
+//doesnt block the load event
+function createIframe(){
+  var i = document.createElement("iframe");
+  i.src = "http://mws.all4senses.com/mws/catalog";
+  i.scrolling = "auto";
+  i.frameborder = "0";
+  i.width = "700px";
+  i.height = "200px";
+  document.getElementById("mws").appendChild(i);
+};
+	
+// Check for browser support of event handling capability
+if (window.addEventListener)
+window.addEventListener("load", createIframe, false);
+else if (window.attachEvent)
+window.attachEvent("onload", createIframe);
+else window.onload = createIframe;
+
+';
+  
   drupal_add_http_header('Content-Type', 'text/javascript');
-  echo 'alert("Test!");';
+  echo $out . 'alert("Test!");';
 }
 
 
