@@ -4,9 +4,11 @@
     attach: function (context, settings) {
        
        $(".checkout_to_original").click(function(event){
-         alert('checkout_to_original');
-         event.preventDefault();
-         //return FALSE;
+         var quit = prompt('checkout_to_original?');
+         if (!quit) {
+          //alert('checkout_to_original');
+          event.preventDefault();
+         }
        });
 
        
