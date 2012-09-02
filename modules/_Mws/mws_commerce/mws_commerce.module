@@ -293,7 +293,7 @@ function mws_commerce_form_alter(&$form, &$form_state, $form_id) {
     // No point in having a "Save" button on the shopping cart block.
     unset($form['actions']);
   }
-  elseif (strpos($form_id, 'commerce_checkout_form_') === 0) {
+  elseif (arg(0) == 'mws' && strpos($form_id, 'commerce_checkout_form_') === 0) {
     
    if (isset($form['buttons'])) {
     // Should we have here replace 'commerce_checkout_form_submit' instead of redefine all field??
