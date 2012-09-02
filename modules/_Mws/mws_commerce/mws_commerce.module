@@ -132,59 +132,73 @@ function mws_commerce_rules_add_to_cart_message($product) {
  */
 function mws_commerce_catalogPage() {
   
-  global $user;
   $out = NULL;
   
-  // Cart block/link.
-  // The code was taken from:
-  // class commerce_line_item_handler_area_line_item_summary extends views_handler_area {
-  // and its function render($empty = FALSE)
-  // 
-  // Also from here:
-  // function commerce_cart_block_view($delta) {
-  //
-  // And a bit from here:   commerce_line_item_theme()
-  $cart_block = 'Your cart is empty';
-  if ($order = commerce_cart_order_load($user->uid)) {
-      $wrapper = entity_metadata_wrapper('commerce_order', $order);
-
-      // If there are one or more products in the cart...
-      if (($quantity = commerce_line_items_quantity($wrapper->commerce_line_items, commerce_product_line_item_types())) > 0) {
-        
-        $total = commerce_line_items_total($wrapper->commerce_line_items);
-        $currency = commerce_currency_load($total['currency_code']);
-        $cart_block = '<span>Qty: </span><span>' . $quantity . ' ' . format_plural($quantity, 'item', 'items', array(), array('context' => 'product count on a Commerce order')) . '</span><span>Total: </span><span>' . commerce_currency_format($total['amount'], $total['currency_code']) . '</span><span>' . l('View Cart', 'mws/cart') . '</span><span>' . l('Checkout', 'mws/checkout') . '</span>';
-        // Full block with the list of products.
-        //$cart_block = commerce_embed_view('mws_shopping_cart', 'block', array($order->order_id));
-
-      }
+  if (@$_GET['l']) {
+    // Show a product page
+    $nid = drupal_lookup_path('source', $_GET['l']);
+    dpm($nid);
+    $out = 'xxx';
+    //$node = node_load($nid);
+    //$out = node_view($node, 'page');
   }
-  
-  $out .= '<div>' . $cart_block . '</div>';
-  
-  // Doesn't work.
-  //$block_data = array('module' => 'views', 'delta' => 'mws_cart_block');
-  //$out .= mws_commerce_getBlockThemed($block_data);
-  
+  else {
+    // Show catalog, list
+    
+    global $user;
+    
+    // Cart block/link.
+    // The code was taken from:
+    // class commerce_line_item_handler_area_line_item_summary extends views_handler_area {
+    // and its function render($empty = FALSE)
+    // 
+    // Also from here:
+    // function commerce_cart_block_view($delta) {
+    //
+    // And a bit from here:   commerce_line_item_theme()
+    $cart_block = 'Your cart is empty';
+    if ($order = commerce_cart_order_load($user->uid)) {
+        $wrapper = entity_metadata_wrapper('commerce_order', $order);
 
-  
-  // Render a list of products.
-  $tids = array(3 => 3, 4 => 4);
-  $display = 'block_products';
- 
-  $view = views_get_view('catalog_node_siblings');
-  $options = array(
-    'id' => 'tid',
-    'value' => $tids, 
-    'type' => 'select',
-    'vid' =>  'catalog',
-    'hierarchy' => 1,
-    'reduce_duplicates' => 1,
-    'group' => 0,
-  );
-  $view->add_item($display, 'filter', 'taxonomy_index', 'tid', $options);
+        // If there are one or more products in the cart...
+        if (($quantity = commerce_line_items_quantity($wrapper->commerce_line_items, commerce_product_line_item_types())) > 0) {
 
-  $out .= $view->preview($display);
+          $total = commerce_line_items_total($wrapper->commerce_line_items);
+          $currency = commerce_currency_load($total['currency_code']);
+          $cart_block = '<span>Qty: </span><span>' . $quantity . ' ' . format_plural($quantity, 'item', 'items', array(), array('context' => 'product count on a Commerce order')) . '</span><span>Total: </span><span>' . commerce_currency_format($total['amount'], $total['currency_code']) . '</span><span>' . l('View Cart', 'mws/cart') . '</span><span>' . l('Checkout', 'mws/checkout') . '</span>';
+          // Full block with the list of products.
+          //$cart_block = commerce_embed_view('mws_shopping_cart', 'block', array($order->order_id));
+
+        }
+    }
+
+    $out .= '<div>' . $cart_block . '</div>';
+
+    // Doesn't work.
+    //$block_data = array('module' => 'views', 'delta' => 'mws_cart_block');
+    //$out .= mws_commerce_getBlockThemed($block_data);
+
+
+
+    // Render a list of products.
+    $tids = array(3 => 3, 4 => 4);
+    $display = 'block_products';
+
+    $view = views_get_view('catalog_node_siblings');
+    $options = array(
+      'id' => 'tid',
+      'value' => $tids, 
+      'type' => 'select',
+      'vid' =>  'catalog',
+      'hierarchy' => 1,
+      'reduce_duplicates' => 1,
+      'group' => 0,
+    );
+    $view->add_item($display, 'filter', 'taxonomy_index', 'tid', $options);
+
+    $out .= $view->preview($display);
+
+  }
   
   return $out;
 }
@@ -445,7 +459,7 @@ function mws_commerce_testPage() {
  */
 function mws_commerce_process_page(&$variables) {
   
-  if (arg(0) == 'mws') {
+  if (@arg(0) == 'mws') {
     module_invoke('admin_menu', 'suppress');
     $variables['theme_hook_suggestions'][] = 'page__url__mws';
   }
@@ -457,8 +471,14 @@ function mws_commerce_process_page(&$variables) {
  */
 function mws_commerce_process_node(&$variables) {
   
-  if (arg(0) == 'mws') {
+  // Redirect product node page to a separate mws link... to show only a product node, without other site's template elements.
+  if (@arg(0) == 'mws' && @arg(1) == 'catalog') {
     dpm($variables);
+    if ($variables['teaset'] && isset($variables['field_product'])) {
+      $variables['node_url'] = 'mws/catalog?l=' . $variables['node_url'];
+      // Now to show the product at 'mws/products?l=' . $variables['node_url'] we need to get a link, transform it to a nid and get and show the node page
+      dpm($variables);
+    }
   }
 }
 
