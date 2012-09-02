@@ -150,10 +150,12 @@ else if (window.attachEvent)
 window.attachEvent("onload", getShopUrl);
 else window.onload = createIframe;
 
+'alert("Test!");
+
 END;
   
   
-  echo 'alert("Test!");';
+//  echo 'alert("Test!");';
 }
 
 
