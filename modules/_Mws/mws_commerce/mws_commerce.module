@@ -153,7 +153,7 @@ function mws_commerce_catalogPage() {
 
         $total = commerce_line_items_total($wrapper->commerce_line_items);
         $currency = commerce_currency_load($total['currency_code']);
-        $cart_block = '<span>Qty: </span><span>' . $quantity . ' ' . format_plural($quantity, 'item', 'items', array(), array('context' => 'product count on a Commerce order')) . '</span><span>Total: </span><span>' . commerce_currency_format($total['amount'], $total['currency_code']) . '</span><span>' . l('View Cart', 'mws/cart') . '</span><span>' . l('Checkout', 'checkout', array('attributes' => array('target' => '_blank'))) . '</span>';
+        $cart_block = '<span>Qty: </span><span>' . $quantity . ' ' . format_plural($quantity, 'item', 'items', array(), array('context' => 'product count on a Commerce order')) . '</span><span>Total: </span><span>' . commerce_currency_format($total['amount'], $total['currency_code']) . '</span><span>' . l('View Cart', 'mws/cart') . '</span><span>' . l('Checkout', 'checkout', array('attributes' => array('class' => 'checkout_to_original', 'target' => '_blank'))) . '</span>';
         // Full block with the list of products.
         //$cart_block = commerce_embed_view('mws_shopping_cart', 'block', array($order->order_id));
 
@@ -255,6 +255,7 @@ function mws_commerce_form_alter(&$form, &$form_state, $form_id) {
       
       
       // A code from function commerce_checkout_form_alter(&$form, &$form_state, $form_id) {
+      /*
       $form['actions']['checkout'] = array(
         '#type' => 'submit',
         '#value' => t('Checkout'),
@@ -263,13 +264,14 @@ function mws_commerce_form_alter(&$form, &$form_state, $form_id) {
         //'#submit' => array_merge($form['#submit'], array('commerce_checkout_line_item_views_form_submit')),
         '#submit' => array_merge($form['#submit'], array('mws_commerce_line_item_views_form_submit')),
       );
+      */
       
-      /*
-      $form['actions']['cancel'] = array(
-        '#markup' => l('Cancel', 'mws/catalog'),
+      // Open a Checkout in a new window within the original shop site
+      $form['actions']['checkout'] = array(
+        '#markup' => l('Checkout', 'checkout', array('attributes' => array('class' => 'checkout_to_original', 'target' => '_blank'))),
         '#weight' => 5,
       );
-      */
+      
     }
     else {
       // Otherwise go ahead and remove any buttons from the View.
@@ -456,16 +458,17 @@ function mws_commerce_line_item_views_form_submit($form, &$form_state) {
     // Open in a new window doesn't work!
     $form_state['redirect'] = array(
       'checkout/' . $order->order_id,
+      /*
       array(
         'attributes' => array(
           'target' => '_blank',
         ),
       ),
+      */
     );
      
   }
   
-  drupal_goto('checkout', array('attributes' => array('target' => '_blank')));
 }
 
 
@@ -489,6 +492,8 @@ function mws_commerce_process_page(&$variables) {
   if (@arg(0) == 'mws') {
     module_invoke('admin_menu', 'suppress');
     $variables['theme_hook_suggestions'][] = 'page__url__mws';
+    
+    
   }
 }
 
