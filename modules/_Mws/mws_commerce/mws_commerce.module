@@ -18,6 +18,13 @@ function mws_commerce_menu() {
     'type' => MENU_CALLBACK,
   );
   
+  $items['getshopurl'] = array(
+    'title' => 'Make a request',
+    'page callback' => 'mws_commerce_getShopUrl_ajax',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  ); 
+  
   $items['test'] = array(
     'title' => 'Test page',
     'page callback' => 'mws_commerce_testPage',
@@ -76,32 +83,77 @@ function mws_commerce_menu() {
 }
 
 
+function mws_commerce_getShopUrl_ajax() {
+  $status = TRUE;
+  $output = '';
+  
+  //$post = $_POST;
+  $post = array();
+  foreach ($_POST as $key => $value) {
+    $post[$key] = check_plain(strip_tags($value));
+  }
+  
+  $shopUrl = 'http://mws.all4senses.com/mws/catalog';
+  
+  drupal_json_output(array('status' => $status, 'data' => $output, 'shopUrl' => $shopUrl));
+}
+
+
+
 function mws_commerce_loadingJs() {
   
-  $out = '
-    
+  drupal_add_http_header('Content-Type', 'text/javascript');
+  
+  print <<<END
+
+ function getShopUrl(){
+
+    (jQuery).ajax({
+            
+        url: '/getshopurl', 
+        data: {
+                op: 'getShopUrl',
+                url: 'xxx',
+              }, 
+            type: 'POST', 
+            dataType: 'json', 
+            success: function(data) 
+                    { 
+                        if(!data.error) {
+                            console.log('The header is arrived!');
+                            createIframe(data.shopUrl);
+                        }
+                        return false;
+                    } 
+    }); // end of (jQuery).ajax
+            
+};
+
+
 //doesnt block the load event
-function createIframe(){
+function createIframe(shopUrl){
   var i = document.createElement("iframe");
-  i.src = "http://mws.all4senses.com/mws/catalog";
+  i.src = shopUrl; //"http://mws.all4senses.com/mws/catalog"
   i.scrolling = "auto";
   i.frameborder = "0";
   i.width = "700px";
   i.height = "200px";
   document.getElementById("mws").appendChild(i);
 };
-	
+
+
+
 // Check for browser support of event handling capability
 if (window.addEventListener)
-window.addEventListener("load", createIframe, false);
+window.addEventListener("load", getShopUrl, false);
 else if (window.attachEvent)
-window.attachEvent("onload", createIframe);
+window.attachEvent("onload", getShopUrl);
 else window.onload = createIframe;
 
-';
+END;
   
-  drupal_add_http_header('Content-Type', 'text/javascript');
-  echo $out . 'alert("Test!");';
+  
+  echo 'alert("Test!");';
 }
 
 
