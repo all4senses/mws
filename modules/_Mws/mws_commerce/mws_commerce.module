@@ -110,6 +110,7 @@ function mws_commerce_loadingJs() {
  function getShopUrl(){
  
     console.log(document.referrer);
+    console.log(document);
     
     (jQuery).ajax({
             
