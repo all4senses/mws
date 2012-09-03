@@ -121,12 +121,12 @@ function mws_commerce_loadingJs() {
                 url: 'xxx',
               }, 
             type: 'POST', 
-            dataType: 'json', 
+            dataType: 'jsonp', 
             success: function(data) 
                     { 
                         if(!data.error) {
                             console.log('ShopUrl is arrived!');
-                            createIframe(data.shopUrl);
+                            //createIframe(data.shopUrl);
                         }
                         console.log('Error: ShopUrl is NOT arrived!');
                         return false;
