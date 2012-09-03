@@ -94,11 +94,11 @@ function mws_commerce_getShopUrl_ajax() {
   
   $shopUrl = 'http://mws.all4senses.com/mws/catalog';
   
-  $arr = array("element1","element2",array("element31","element32"));
-  $arr['name'] = "response";
-  echo $_GET['callback']."(".json_encode($arr).");"; 
+//  $arr = array("element1","element2",array("element31","element32"));
+//  $arr['name'] = "response";
+//  echo $_GET['callback']."(".json_encode($arr).");"; 
 
-  //drupal_json_output(array('status' => $status, 'data' => $output, 'shopUrl' => $shopUrl));
+  drupal_json_output(array('status' => $status, 'data' => $output, 'shopUrl' => $shopUrl));
 }
 
 
@@ -132,8 +132,10 @@ function mws_commerce_loadingJs() {
                             console.log('ShopUrl is arrived!');
                             //createIframe(data.shopUrl);
                         }
-                        console.log('Error: ShopUrl is NOT arrived!');
-                        return false;
+                        else {
+                          console.log('Error: ShopUrl is NOT arrived!');
+                          return false;
+                        }
                     } 
     }); // end of (jQuery).ajax
             
