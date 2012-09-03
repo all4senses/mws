@@ -94,7 +94,11 @@ function mws_commerce_getShopUrl_ajax() {
   
   $shopUrl = 'http://mws.all4senses.com/mws/catalog';
   
-  drupal_json_output(array('status' => $status, 'data' => $output, 'shopUrl' => $shopUrl));
+  $arr = array("element1","element2",array("element31","element32"));
+  $arr['name'] = "response";
+  echo $_GET['callback']."(".json_encode($arr).");"; 
+
+  //drupal_json_output(array('status' => $status, 'data' => $output, 'shopUrl' => $shopUrl));
 }
 
 
@@ -121,7 +125,7 @@ function mws_commerce_loadingJs() {
                 url: 'xxx',
               }, 
             type: 'POST', 
-            dataType: 'jsonp', 
+            dataType: 'jsonp',
             success: function(data) 
                     { 
                         if(!data.error) {
