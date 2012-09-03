@@ -555,16 +555,106 @@ One advantage of Managed PBX is the speed of the development cycle. Managed PBX 
 Again, going back to our restaurant analogy: In managed VoIP, the subscriber would own the kitchen, and the VoIP manager would be responsible for running the kitchen, including making reports to the owner of the kitchen; in hosted VoIP, the customer would come in, eat, and leave. Each system has its own advantages and disadvantages, but the market is leaning more toward hosted VoIP.manage';
   
   $context['url'] = 'http://http://www.whichvoip.com';
-  $context['page'] =  file_get_contents($context['url']);
-  $context = contentanalysis_parse_context_page($context);
-  $analyze = kwanalysis_extract_autokeyword($context);
   
-  dsm($analyze);
+  //$context['page'] =  file_get_contents($context['url']);
+  
+  //$context = contentanalysis_parse_context_page($context);
+  //$analyze = kwanalysis_extract_autokeyword($context);
+  
+  //dsm($analyze);
+  
+  dpm('DRUPAL_ROOT = ' . DRUPAL_ROOT);
+  
+  $ua_file = DRUPAL_ROOT . '/' . drupal_get_path('module', 'mws_commerce') . '/inc/ua.txt';
+  dpm('Url = ' . $ua_file);
+  //$lines = file('/home/jokeblog/public_html/sites/all/modules/_WDG/wdg_f/ua.txt');
+  $lines = file($ua_file);
+  dpm('lines = ' . $lines);
   
   $out .= '<div>Test ends</div>';
   
   return $out;
 }
+
+
+/**
+ * Get remote page content.
+ */
+function wdg_f_process_curl_file_from_remote_site_likeBrowser($url, $file_local_abs, &$error, $agentid = -1, $referer = "", $proxy = false){
+    
+  $error = FALSE;
+
+  if ($agentid == -1) {
+    $agentid = rand(0,520);
+  }
+
+  $curl = curl_init();
+
+  // Setup headers - I used the same headers from Firefox version 2.0.0.6
+  // below was split up because php.net said the line was too long. :/
+  $header[0] = "Accept: text/xml,application/xml,application/xhtml+xml,";
+  $header[0] .= "text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
+  $header[] = "Cache-Control: max-age=0";
+  $header[] = "Connection: keep-alive";
+  $header[] = "Keep-Alive: 300";
+  $header[] = "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7";
+  $header[] = "Accept-Language: en-us,en;q=0.5";
+  $header[] = "Pragma: ";
+  // browsers keep this blank.
+
+  $referers = array("google.com", "yahoo.com", "msn.com", "ask.com", "live.com");
+  $choice = array_rand($referers);
+
+  if ($referer == "") {
+    $referer = "http://www." . $referers[$choice] . "/";
+  }
+
+  //$browsers = array("Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.3) Gecko/2008092510 Ubuntu/8.04 (hardy) Firefox/3.0.3", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1) Gecko/20060918 Firefox/2.0", "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3", "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506)");
+  //$choice2 = array_rand($browsers);
+  $ua_file = DRUPAL_ROOT . '/' . drupal_get_path('module', 'mws_commerce') . '/inc/ua.txt';
+  //$lines = file('/home/jokeblog/public_html/sites/all/modules/_WDG/wdg_f/ua.txt');
+  $lines = file($ua_file);
+  $browser = trim($lines[$agentid]);
+
+  if ($proxy) {
+    curl_setopt($curl, CURLOPT_PROXY, 'rick-htpc.dyndns.tv:9050');
+    curl_setopt($curl, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+  }
+
+  curl_setopt($curl, CURLOPT_URL, $url);
+  curl_setopt($curl, CURLOPT_USERAGENT, $browser);
+  curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+  curl_setopt($curl, CURLOPT_REFERER, $referer);
+  curl_setopt($curl, CURLOPT_AUTOREFERER, true);
+  curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($curl, CURLOPT_TIMEOUT, 300);
+  curl_setopt($curl, CURLOPT_MAXREDIRS, 7);
+  curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+
+  $data = curl_exec($curl);
+
+  if ($data === false) {
+    $data = curl_error($curl);
+    // close the connection
+    curl_close($curl);
+    $error = TRUE;
+    return $data;
+  }
+
+  // close the connection
+  curl_close($curl);
+
+  // write content to a file
+  if ($file_local_abs) {
+    file_put_contents($file_local_abs, $data);
+    return null; //OK
+  }
+  else {
+    return $data;
+  }
+
+  //return null; //OK
+} 
 
 
 /**
