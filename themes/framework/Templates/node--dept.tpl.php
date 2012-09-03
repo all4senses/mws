@@ -47,7 +47,8 @@
     
 dpm($node);
 
-$term_children = taxonomy_get_children($node->field_category['und'][0]['taxonomy_term']->tid, $node->field_category['und'][0]['taxonomy_term']->vid);
+//$term_children = taxonomy_get_children($node->field_category['und'][0]['taxonomy_term']->tid, $node->field_category['und'][0]['taxonomy_term']->vid);
+$term_children = taxonomy_get_children($node->field_category['und'][0]['tid']);//, $node->field_category['und'][0]['taxonomy_term']->vid);
 
 
 $tids = NULL;
