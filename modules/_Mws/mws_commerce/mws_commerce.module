@@ -332,7 +332,7 @@ function mws_commerce_form_alter(&$form, &$form_state, $form_id) {
     // Only alter buttons if the cart form View shows line items.
     $view = reset($form_state['build_info']['args']);
     
-    $form['actions']['checkout'] = array(
+    $form['catalog_link'] = array(
         '#markup' => '<span>' . l('Catalog', 'mws/catalog') . '</span>',
         '#weight' => -10,
       );
