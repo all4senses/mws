@@ -95,7 +95,7 @@ function mws_commerce_getShopUrl_ajax() {
   $shopUrl = 'http://mws.all4senses.com/mws/catalog';
   
   //$arr['name'] = "response";
-  echo @$_GET['callback']."(".json_encode(array('status' => $status, 'referrer' => $get['referrer'], 'shopUrl' => $shopUrl)).");"; 
+  echo @$_GET['callback']."(".json_encode(array('status' => $status, 'target_url' => $get['target_url'], 'shopUrl' => $shopUrl)).");"; 
   //drupal_json_output(array('status' => $status, 'data' => $output, 'shopUrl' => $shopUrl));
 }
 
@@ -110,6 +110,7 @@ function mws_commerce_loadingJs() {
  function getShopUrl(){
  
     console.log(document.referrer);
+    console.log(document.URL);
     console.log(document);
     
     (jQuery).ajax({
@@ -117,7 +118,7 @@ function mws_commerce_loadingJs() {
         url: 'http://mws.all4senses.com/getshopurl', 
         data: {
                 op: 'getShopUrl',
-                referrer: document.referrer,
+                target_url: document.URL,
               }, 
             type: 'GET', 
             dataType: 'jsonp',
@@ -125,7 +126,7 @@ function mws_commerce_loadingJs() {
                     { 
                         if(!data.error) {
                             createIframe(data.shopUrl);
-                            console.log(data.referrer);
+                            console.log(data.target_url);
                         }
                         else {
                           return false;
