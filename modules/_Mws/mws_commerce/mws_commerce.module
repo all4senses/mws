@@ -124,7 +124,7 @@ function mws_commerce_loadingJs() {
                 op: 'getShopUrl',
                 url: 'xxx',
               }, 
-            type: 'POST', 
+            type: 'GET', 
             dataType: 'jsonp',
             success: function(data) 
                     { 
