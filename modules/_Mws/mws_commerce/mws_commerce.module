@@ -333,7 +333,7 @@ function mws_commerce_form_alter(&$form, &$form_state, $form_id) {
     $view = reset($form_state['build_info']['args']);
     
     $form['actions']['checkout'] = array(
-        '#markup' => '<span>' . l('Catalog', 'mws/catalog') . '</span>' . $out,
+        '#markup' => '<span>' . l('Catalog', 'mws/catalog') . '</span>',
         '#weight' => -10,
       );
 
