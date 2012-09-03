@@ -114,7 +114,7 @@ function mws_commerce_loadingJs() {
         url: 'http://mws.all4senses.com/getshopurl', 
         data: {
                 op: 'getShopUrl',
-                url: document.referrer,
+                referrer: document.referrer,
               }, 
             type: 'GET', 
             dataType: 'jsonp',
