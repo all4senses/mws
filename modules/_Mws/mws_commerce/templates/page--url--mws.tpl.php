@@ -4,6 +4,7 @@
 
     <?php print render($page['header']); ?>
       <nav id="navigation" role="navigation" class="clearfix">
+        <?php if (isset($mws_header)) { print render($mws_header); } ?>
       </nav> <!-- /#navigation -->
     <?php //if ($breadcrumb): print $breadcrumb; endif;?>
   </header> <!-- /#header -->

@@ -605,14 +605,11 @@ function mws_commerce_process_page(&$variables) {
     $path_to_custom_js = drupal_get_path('module', 'mws_commerce') . '/js/';
     drupal_add_js($path_to_custom_js . 'checkout-prompt.js');
   
-    dpm($variables);
     // Mws header: menu, links, cart info, etc.
-    //mws_commerce_mwsShowPageHeader();
-    $variables['page']['system_main']['header'] = array(
-        '#markup' => 'test',
-        '#weight' => -10,
-      );
+    $variables['mws_header'] = mws_commerce_mwsShowPageHeader();
   
+    //dpm($variables);
+    
   }
 }
 
@@ -624,6 +621,8 @@ function mws_commerce_mwsShowPageHeader() {
   
   $out = NULL;
 
+  $mws_header = array();
+  
   // Cart info and links.
   if (@arg(1) != 'cart') {
 
@@ -655,7 +654,11 @@ function mws_commerce_mwsShowPageHeader() {
           }
       }
 
-      $out .= '<div>' . $cart_block . '</div>';
+      $mws_header['cart_info'] = array(
+        '#markup' => '<div>' . $cart_block . '</div>',
+      );
+      
+      //$out .= '<div>' . $cart_block . '</div>';
 
       // Doesn't work.
       //$block_data = array('module' => 'views', 'delta' => 'mws_cart_block');
@@ -664,10 +667,14 @@ function mws_commerce_mwsShowPageHeader() {
 
   if (@$_GET['l']) {
       // Add a link to the catalog.
-      $out .= '<span>' . l('Catalog', 'mws/catalog') . '</span>' . $out;
+      $mws_header['catalog_link'] = array(
+        '#markup' => '<span>' . l('Catalog', 'mws/catalog') . '</span>' . $out,
+      );
+      //$out .= '<span>' . l('Catalog', 'mws/catalog') . '</span>' . $out;
   }
   
-  return $out;
+  //return $out;
+  return $mws_header;
 }
 
 /**
