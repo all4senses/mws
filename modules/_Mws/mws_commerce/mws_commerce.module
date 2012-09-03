@@ -605,9 +605,67 @@ function mws_commerce_process_page(&$variables) {
     $path_to_custom_js = drupal_get_path('module', 'mws_commerce') . '/js/';
     drupal_add_js($path_to_custom_js . 'checkout-prompt.js');
   
+    dpm($variables);
+    // Mws header: menu, links, cart info, etc.
+    //mws_commerce_mwsShowPageHeader();
+    
+  
   }
 }
 
+
+/**
+ * Mws header: menu, links, cart info, etc.
+ */
+function mws_commerce_mwsShowPageHeader() {
+  
+  $out = NULL;
+
+  // Cart info and links.
+  if (@arg(1) != 'cart') {
+
+      global $user;
+
+
+      // Cart block/link.
+      // The code was taken from:
+      // class commerce_line_item_handler_area_line_item_summary extends views_handler_area {
+      // and its function render($empty = FALSE)
+      // 
+      // Also from here:
+      // function commerce_cart_block_view($delta) {
+      //
+      // And a bit from here:   commerce_line_item_theme()
+      $cart_block = 'Your cart is empty';
+      if ($order = commerce_cart_order_load($user->uid)) {
+          $wrapper = entity_metadata_wrapper('commerce_order', $order);
+
+          // If there are one or more products in the cart...
+          if (($quantity = commerce_line_items_quantity($wrapper->commerce_line_items, commerce_product_line_item_types())) > 0) {
+
+            $total = commerce_line_items_total($wrapper->commerce_line_items);
+            $currency = commerce_currency_load($total['currency_code']);
+            $cart_block = '<span>Qty: </span><span>' . $quantity . ' ' . format_plural($quantity, 'item', 'items', array(), array('context' => 'product count on a Commerce order')) . '</span><span>Total: </span><span>' . commerce_currency_format($total['amount'], $total['currency_code']) . '</span><span>' . l('View Cart', 'mws/cart') . '</span><span>' . l('Checkout', 'checkout', array('attributes' => array('class' => 'checkout_to_original', 'target' => '_blank'))) . '</span>';
+            // Full block with the list of products.
+            //$cart_block = commerce_embed_view('mws_shopping_cart', 'block', array($order->order_id));
+
+          }
+      }
+
+      $out .= '<div>' . $cart_block . '</div>';
+
+      // Doesn't work.
+      //$block_data = array('module' => 'views', 'delta' => 'mws_cart_block');
+      //$out .= mws_commerce_getBlockThemed($block_data);
+  }
+
+  if (@$_GET['l']) {
+      // Add a link to the catalog.
+      $out .= '<span>' . l('Catalog', 'mws/catalog') . '</span>' . $out;
+  }
+  
+  return $out;
+}
 
 /**
  * Override or insert variables into the node template.
