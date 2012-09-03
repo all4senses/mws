@@ -569,7 +569,7 @@ Again, going back to our restaurant analogy: In managed VoIP, the subscriber wou
   dpm('Url = ' . $ua_file);
   //$lines = file('/home/jokeblog/public_html/sites/all/modules/_WDG/wdg_f/ua.txt');
   $lines = file($ua_file);
-  dpm('lines = ' . $lines);
+  dpm($lines);
   
   $out .= '<div>Test ends</div>';
   
