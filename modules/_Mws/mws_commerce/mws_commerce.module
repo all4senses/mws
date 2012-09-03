@@ -331,7 +331,13 @@ function mws_commerce_form_alter(&$form, &$form_state, $form_id) {
   if (strpos($form_id, 'views_form_mws_shopping_cart_form') === 0) {
     // Only alter buttons if the cart form View shows line items.
     $view = reset($form_state['build_info']['args']);
+    
+    $form['actions']['checkout'] = array(
+        '#markup' => '<span>' . l('Catalog', 'mws/catalog') . '</span>' . $out,
+        '#weight' => -10,
+      );
 
+    
     if (!empty($view->result)) {
       // Change the Save button to say Update cart.
       $form['actions']['submit']['#value'] = t('Update cart');
