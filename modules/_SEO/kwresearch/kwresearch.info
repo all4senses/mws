@@ -1,0 +1,11 @@
+name = "Keyword Research"
+description = "Provides keyword research tools and faciliates adding keywords to nodes."
+package = Keyword Research
+core = 7.x
+configure = admin/config/search/kwresearch
+; Information added by drupal.org packaging script on 2012-01-11
+version = "7.x-1.0-alpha3"
+core = "7.x"
+project = "kwresearch"
+datestamp = "1326321040"
+
