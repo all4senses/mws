@@ -109,9 +109,9 @@ function mws_commerce_loadingJs() {
 
  function getShopUrl(){
  
-    console.log(document.referrer);
-    console.log(document.URL);
-    console.log(document);
+    //console.log(document.referrer);
+    //console.log(document.URL);
+    //console.log(document);
     
     (jQuery).ajax({
             
@@ -126,7 +126,7 @@ function mws_commerce_loadingJs() {
                     { 
                         if(!data.error) {
                             createIframe(data.shopUrl);
-                            console.log(data.target_url);
+                            //console.log(data.target_url);
                         }
                         else {
                           return false;
@@ -533,6 +533,13 @@ function mws_commerce_line_item_views_form_submit($form, &$form_state) {
  */
 function mws_commerce_testPage() {
   $out = '<div>Test starts</div>';
+  
+  
+  $test_page['body'] = 'A PBX, in modern business, is a physical thing that you can see. Traditional PBXs had closets full of hardware. An on-premise IP PBX is a server, usually Asterisk-based, with Ethernet ports, that replaces a traditional PBX. They are about the size of a desktop computer or a rack mount, and can be connected to other IP PBX servers with a USB cable. The PBX is programmed over the web by an IT specialist. The equipment is owned and maintained by the company. A Hybrid PBX system is made to integrate older technology such as ISDN and telephone jacks, but an IP PBX is not necessarily backwards-compatible.  ';
+  
+  $analyze = kwanalysis_extract_autokeyword($test_page);
+  
+  dsm($analyze);
   
   $out .= '<div>Test ends</div>';
   
