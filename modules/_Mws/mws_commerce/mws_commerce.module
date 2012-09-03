@@ -295,7 +295,7 @@ function mws_commerce_catalogPage() {
     $display = 'block_products';
 
     $view = views_get_view('catalog_node_siblings');
-    dpm($view);
+    //dpm($view);
     $options = array(
       'id' => 'tid',
       'value' => $tids, 
@@ -309,7 +309,7 @@ function mws_commerce_catalogPage() {
 
     $out .= $view->preview($display);
 
-    dpm($out);
+    //dpm($out);
     
   }
   
