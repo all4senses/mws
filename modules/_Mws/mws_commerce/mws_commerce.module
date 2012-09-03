@@ -109,6 +109,8 @@ function mws_commerce_loadingJs() {
 
  function getShopUrl(){
  
+    console.log(document.referrer);
+    
     (jQuery).ajax({
             
         url: 'http://mws.all4senses.com/getshopurl', 
