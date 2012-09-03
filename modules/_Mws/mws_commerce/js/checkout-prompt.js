@@ -4,8 +4,8 @@
     attach: function (context, settings) {
        
        $(".checkout_to_original").click(function(event){
-         var cancel = confirm('You will be redirected to the shop site. Do you want to edit the cart before we proceed?');
-         if (cancel) {
+         var go_to_shop = confirm('Are you ready to be redirected to the shop site to finish the purchase? (You can choose to cancel and edit the cart before we proceed)');
+         if (!go_to_shop) {
           event.preventDefault();
          }
        });

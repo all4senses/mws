@@ -94,10 +94,7 @@ function mws_commerce_getShopUrl_ajax() {
   
   $shopUrl = 'http://mws.all4senses.com/mws/catalog';
   
-  //$arr = array("element1","element2",array("element31","element32"));
-  //$arr = array("element1","element2",array("element31","element32"));
-  $arr['name'] = "response";
-  //echo $_GET['callback']."(".json_encode($arr).");"; 
+  //$arr['name'] = "response";
   echo @$_GET['callback']."(".json_encode(array('status' => $status, 'data' => $output, 'shopUrl' => $shopUrl)).");"; 
   //drupal_json_output(array('status' => $status, 'data' => $output, 'shopUrl' => $shopUrl));
 }
@@ -112,12 +109,6 @@ function mws_commerce_loadingJs() {
 
  function getShopUrl(){
  
-    console.log('in getShopUrl...');
-    
-    //createIframe("http://mws.all4senses.com/mws/catalog");
-    
-    //return;
-    
     (jQuery).ajax({
             
         url: 'http://mws.all4senses.com/getshopurl', 
@@ -130,12 +121,9 @@ function mws_commerce_loadingJs() {
             success: function(data) 
                     { 
                         if(!data.error) {
-                            console.log('ShopUrl is arrived!');
-                            console.log(data);
                             createIframe(data.shopUrl);
                         }
                         else {
-                          console.log('Error: ShopUrl is NOT arrived!');
                           return false;
                         }
                     } 
@@ -147,8 +135,6 @@ function mws_commerce_loadingJs() {
 //doesnt block the load event
 function createIframe(shopUrl){
   
-  console.log(' in createIframe');
-  
   var i = document.createElement("iframe");
   i.src = shopUrl; //"http://mws.all4senses.com/mws/catalog"
   i.scrolling = "auto";
@@ -158,9 +144,6 @@ function createIframe(shopUrl){
   document.getElementById("mws").appendChild(i);
 };
 
-
-console.log('Before onload..');
-
 // Check for browser support of event handling capability
 if (window.addEventListener)
   window.addEventListener("load", getShopUrl, false);
@@ -169,12 +152,10 @@ else if (window.attachEvent)
 else 
   window.onload = createIframe;
 
-console.log('After onload.');
+//console.log('After onload.');
 
 END;
-  
-  
-//  echo 'alert("Test!");';
+
 }
 
 
