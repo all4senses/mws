@@ -608,7 +608,10 @@ function mws_commerce_process_page(&$variables) {
     dpm($variables);
     // Mws header: menu, links, cart info, etc.
     //mws_commerce_mwsShowPageHeader();
-    
+    $variables['page']['system_main']['header'] = array(
+        '#markup' => 'test',
+        '#weight' => -10,
+      );
   
   }
 }
