@@ -620,7 +620,7 @@ function mws_commerce_mwsShowPageHeader() {
       //$out .= mws_commerce_getBlockThemed($block_data);
   }
 
-  if (@$_GET['l']) {
+  if (@$_GET['l'] || @arg(1) == 'cart') {
       // Add a link to the catalog.
       $mws_header['catalog_link'] = array(
         '#markup' => '<span>' . l('Catalog', 'mws/catalog') . '</span>' . $out,
