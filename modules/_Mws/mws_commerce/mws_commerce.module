@@ -291,10 +291,8 @@ function mws_commerce_catalogPage() {
 
 
     // Render a list of products.
-    //$tids = array(3 => 3, 4 => 4);
-    $tids = array(2 => 2);
-    //$display = 'block_products';
-    $display = 'block_depts';
+    $tids = array(3 => 3, 4 => 4);
+    $display = 'block_products';
 
     $view = views_get_view('catalog_node_siblings');
     //dpm($view);
