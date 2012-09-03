@@ -130,6 +130,7 @@ function mws_commerce_loadingJs() {
                     { 
                         if(!data.error) {
                             console.log('ShopUrl is arrived!');
+                            console.log(data);
                             //createIframe(data.shopUrl);
                         }
                         else {
