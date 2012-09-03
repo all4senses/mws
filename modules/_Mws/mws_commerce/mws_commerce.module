@@ -287,7 +287,7 @@ function mws_commerce_catalogPage() {
     // Show catalog, list
     
     
-dpm('dsdsdfsdf');
+
 
 
     // Render a list of products.
@@ -295,6 +295,7 @@ dpm('dsdsdfsdf');
     $display = 'block_products';
 
     $view = views_get_view('catalog_node_siblings');
+    dpm($view);
     $options = array(
       'id' => 'tid',
       'value' => $tids, 
@@ -308,6 +309,8 @@ dpm('dsdsdfsdf');
 
     $out .= $view->preview($display);
 
+    dpm($out);
+    
   }
   
   return $out;
