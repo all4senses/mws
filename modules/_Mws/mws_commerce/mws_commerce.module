@@ -109,9 +109,9 @@ function mws_commerce_loadingJs() {
  
     console.log('in getShopUrl...');
     
-    createIframe("http://mws.all4senses.com/mws/catalog");
+    //createIframe("http://mws.all4senses.com/mws/catalog");
     
-    return;
+    //return;
     
     (jQuery).ajax({
             
@@ -151,6 +151,7 @@ function createIframe(shopUrl){
 };
 
 
+console.log('Before onload..');
 
 // Check for browser support of event handling capability
 if (window.addEventListener)
@@ -160,7 +161,7 @@ else if (window.attachEvent)
 else 
   window.onload = createIframe;
 
-alert("Test!");
+console.log('After onload.');
 
 END;
   
@@ -292,12 +293,6 @@ function mws_commerce_form_alter(&$form, &$form_state, $form_id) {
   if (strpos($form_id, 'views_form_mws_shopping_cart_form') === 0) {
     // Only alter buttons if the cart form View shows line items.
     $view = reset($form_state['build_info']['args']);
-    
-    $form['catalog_link'] = array(
-        '#markup' => '<span>' . l('Catalog', 'mws/catalog') . '</span>',
-        '#weight' => -10,
-      );
-
     
     if (!empty($view->result)) {
       // Change the Save button to say Update cart.
