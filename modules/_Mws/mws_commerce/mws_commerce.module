@@ -682,6 +682,7 @@ function mws_commerce_process_page(&$variables) {
 /**
 * Default theme function for all fields rows.
 */
+/*
 function mws_commerce_preprocess_views_view_fields(&$vars) {
   
   dpm($vars);
@@ -693,7 +694,7 @@ function mws_commerce_process_views_view_fields(&$vars) {
   dpm($vars);
   
 }
-
+*/
 function mws_commerce_preprocess_views_view_field(&$vars) {
   
   dpm($vars);
