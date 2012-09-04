@@ -124,6 +124,8 @@ function mws_commerce_chooseRelevantShop($site_keywords = NULL) {
   
   // A Stub with the example shop.
   $shopUrl = 'http://mws.all4senses.com/mws/catalog';
+  
+  return $shopUrl;
 }
 
 
