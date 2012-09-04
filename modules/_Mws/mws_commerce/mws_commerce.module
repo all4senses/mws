@@ -694,6 +694,18 @@ function mws_commerce_process_views_view_fields(&$vars) {
   
 }
 
+function mws_commerce_preprocess_views_view_field(&$vars) {
+  
+  dpm($vars);
+  
+}
+
+function mws_commerce_process_views_view_field(&$vars) {
+  
+  dpm($vars);
+  
+}
+
 
 function mws_commerce_views_pre_render(&$view) {
   dpm($view);
