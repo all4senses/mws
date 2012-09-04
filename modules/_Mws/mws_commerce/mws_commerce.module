@@ -719,7 +719,7 @@ function mws_commerce_preprocess_views_view_field(&$vars) {
     }
     
     //$vars['output'] = '<div>' . $vars['row']->field_commerce_display_path[0]['rendered']['#markup'] . '</div>';
-    $vars['output'] = l($vars['row']->original_value, 'mws/cart', array('query' => array('l' => $aliased_path)));
+    $vars['output'] = l($vars['field']->original_value, 'mws/cart', array('query' => array('l' => $aliased_path)));
     
   }
   //$vars['output'] = $vars['field']->advanced_render($vars['row']);
