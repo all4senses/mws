@@ -700,7 +700,7 @@ function mws_commerce_preprocess_views_view_field(&$vars) {
   //dpr($vars['field']);
   //die;
   dpm($vars['output']);
-  //dpm($vars['row']);
+  dpm($vars['row']);
   //$vars['output'] = $vars['field']->advanced_render($vars['row']);
 }
 /*
@@ -712,8 +712,8 @@ function mws_commerce_process_views_view_field(&$vars) {
 */
 
 function mws_commerce_views_pre_render(&$view) {
-  dpm($view);
-  dpm($view->build_info);
+  //dpm($view);
+  //dpm($view->build_info);
 }
 /**
  * Mws header: menu, links, cart info, etc.
