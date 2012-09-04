@@ -680,34 +680,11 @@ function mws_commerce_process_page(&$variables) {
 
 
 /**
-* Default theme function for all fields rows.
-*/
-/*
-function mws_commerce_preprocess_views_view_fields(&$vars) {
-  
-  dpm($vars);
-  
-}
-
-function mws_commerce_process_views_view_fields(&$vars) {
-  
-  dpm($vars);
-  
-}
-*/
+ * Default theme function for all fields.
+ * 
+ * Change the url of an item from product-alias to mws/catalog?l=product-alias to show it via own template.
+ */
 function mws_commerce_preprocess_views_view_field(&$vars) {
-  
-  //dpr($vars['field']);
-  //die;
-  //dpm($vars['output']);
-  //dpm($vars['row']);
-  //dpm($vars['field']);
-  
-  
-          
-          
-          //|| ($nid = str_replace('node/', '', drupal_lookup_path('source', $_GET['l']))) ) {
-      
     
   if ($vars['field']->field == 'line_item_title') {
     $original_path = $vars['row']->field_commerce_display_path[0]['rendered']['#markup'];
@@ -718,24 +695,15 @@ function mws_commerce_preprocess_views_view_field(&$vars) {
       }
     }
     
-    //$vars['output'] = '<div>' . $vars['row']->field_commerce_display_path[0]['rendered']['#markup'] . '</div>';
-    $vars['output'] = l($vars['field']->original_value, 'mws/cart', array('query' => array('l' => $aliased_path)));
+    // Original Example from views
+    //$vars['output'] = $vars['field']->advanced_render($vars['row']);
     
+    $vars['output'] = l($vars['field']->original_value, 'mws/catalog', array('query' => array('l' => $aliased_path)));
   }
-  //$vars['output'] = $vars['field']->advanced_render($vars['row']);
-}
-/*
-function mws_commerce_process_views_view_field(&$vars) {
-  
-  dpm($vars);
   
 }
-*/
 
-function mws_commerce_views_pre_render(&$view) {
-  //dpm($view);
-  //dpm($view->build_info);
-}
+
 /**
  * Mws header: menu, links, cart info, etc.
  */
