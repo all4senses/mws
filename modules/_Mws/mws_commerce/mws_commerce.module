@@ -554,7 +554,7 @@ One advantage of Managed PBX is the speed of the development cycle. Managed PBX 
 
 Again, going back to our restaurant analogy: In managed VoIP, the subscriber would own the kitchen, and the VoIP manager would be responsible for running the kitchen, including making reports to the owner of the kitchen; in hosted VoIP, the customer would come in, eat, and leave. Each system has its own advantages and disadvantages, but the market is leaning more toward hosted VoIP.manage';
   
-  $context['url'] = 'http://http://www.whichvoip.com';
+  $context['url'] = 'http://www.whichvoip.com';
   
   //$error_data = NULL;
   if ($context['page'] = mws_commerce_file_get_content($context['url'], &$error_data)) {
