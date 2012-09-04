@@ -13,7 +13,7 @@ function mws_commerce_menu() {
  
   $items['mws.js'] = array(
     'title' => 'Test page',
-    'page callback' => 'mws_commerce_loadingJs',
+    'page callback' => 'mws_commerce_loadShopToRemoteSite_js',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
@@ -83,6 +83,9 @@ function mws_commerce_menu() {
 }
 
 
+/**
+ * Return a shop url to load into a target site's iframe.
+ */
 function mws_commerce_getShopUrl_ajax() {
   $status = TRUE;
   $output = '';
@@ -92,16 +95,43 @@ function mws_commerce_getShopUrl_ajax() {
     $get[$key] = check_plain(strip_tags($value));
   }
   
-  $shopUrl = 'http://mws.all4senses.com/mws/catalog';
-  
+  // Get a remote client site's keywords to find out what shop to load.
+  $context['url'] = $clientSiteUrl;
+  if ($context['page'] = mws_commerce_file_get_content($context['url'], &$error_data)) {
+    $context = contentanalysis_parse_context_page($context, $analysis);
+    $site_keywords = kwanalysis_extract_autokeyword($context, $analysis);
+    //dpm($site_keywords);
+    $shopUrl = mws_commerce_chooseRelevantShop($site_keywords);
+  }
+  else {
+    // Error while parsing a file, so return a default or a random shop.
+    //dpm($error_data);
+    $shopUrl = mws_commerce_chooseRelevantShop();
+  }
+    
   //$arr['name'] = "response";
   echo @$_GET['callback']."(".json_encode(array('status' => $status, 'target_url' => $get['target_url'], 'shopUrl' => $shopUrl)).");"; 
   //drupal_json_output(array('status' => $status, 'data' => $output, 'shopUrl' => $shopUrl));
 }
 
 
+/**
+ * Matches a target site keywords to available shops in the MWS Network and returns the most suitable one.
+ * 
+ * $site_keywords = NULL: Return a default or a random shop.
+ */
+function mws_commerce_chooseRelevantShop($site_keywords = NULL) {
+  
+  // A Stub with the example shop.
+  $shopUrl = 'http://mws.all4senses.com/mws/catalog';
+}
 
-function mws_commerce_loadingJs() {
+
+
+/**
+ * Return a js script that load a shop "block" into iframe of a target (client) remote site.
+ */
+function mws_commerce_loadShopToRemoteSite_js() {
   
   drupal_add_http_header('Content-Type', 'text/javascript');
   
@@ -125,8 +155,10 @@ function mws_commerce_loadingJs() {
             success: function(data) 
                     { 
                         if(!data.error) {
+                          if (data.shopUrl) {
                             createIframe(data.shopUrl);
                             //console.log(data.target_url);
+                          }
                         }
                         else {
                           return false;
@@ -156,8 +188,6 @@ else if (window.attachEvent)
   window.attachEvent("onload", getShopUrl);
 else 
   window.onload = createIframe;
-
-//console.log('After onload.');
 
 END;
 
