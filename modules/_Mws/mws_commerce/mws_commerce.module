@@ -96,7 +96,7 @@ function mws_commerce_getShopUrl_ajax() {
   }
   
   // Get a remote client site's keywords to find out what shop to load.
-  $context['url'] = $clientSiteUrl;
+  $context['url'] = $get['target_url'];
   if ($context['page'] = mws_commerce_file_get_content($context['url'], &$error_data)) {
     $context = contentanalysis_parse_context_page($context, $analysis);
     $site_keywords = kwanalysis_extract_autokeyword($context, $analysis);
