@@ -558,13 +558,12 @@ Again, going back to our restaurant analogy: In managed VoIP, the subscriber wou
   
   //$error_data = NULL;
   if ($context['page'] = mws_commerce_file_get_content($context['url'], &$error_data)) {
-    $context = contentanalysis_parse_context_page($context);
-    $analyze = kwanalysis_extract_autokeyword($context);
+    $context = contentanalysis_parse_context_page($context, $analysis);
+    $analyze = kwanalysis_extract_autokeyword($context, $analysis);
 
-    dsm($analyze);
+    dpm($analyze);
   }
   else {
-    dpm($context);
     dpm($error_data);
   }
   
