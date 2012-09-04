@@ -697,7 +697,7 @@ function mws_commerce_process_views_view_fields(&$vars) {
 */
 function mws_commerce_preprocess_views_view_field(&$vars) {
   
-  dpm($vars);
+  dpm($vars['field']);
   //$vars['output'] = $vars['field']->advanced_render($vars['row']);
 }
 /*
