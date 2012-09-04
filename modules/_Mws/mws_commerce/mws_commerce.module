@@ -701,6 +701,7 @@ function mws_commerce_preprocess_views_view_field(&$vars) {
   //die;
   dpm($vars['output']);
   dpm($vars['row']);
+  dpm($vars['field']);
   //$vars['output'] = $vars['field']->advanced_render($vars['row']);
 }
 /*
