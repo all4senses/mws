@@ -688,6 +688,12 @@ function mws_commerce_preprocess_views_view_fields(&$vars) {
   
 }
 
+function mws_commerce_process_views_view_fields(&$vars) {
+  
+  dpm($vars);
+  
+}
+
 
 /**
  * Mws header: menu, links, cart info, etc.
