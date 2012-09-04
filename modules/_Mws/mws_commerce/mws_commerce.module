@@ -712,7 +712,7 @@ function mws_commerce_preprocess_views_view_field(&$vars) {
   if ($vars['field']->field == 'line_item_title') {
     $original_path = $vars['row']->field_commerce_display_path[0]['rendered']['#markup'];
     
-    if (is_numeric($aliased_path = str_replace('node/', '', $_GET['l']))) {
+    if (is_numeric($aliased_path = str_replace('node/', '', $original_path))) {
       if (!$aliased_path = drupal_lookup_path('alias', $original_path)) {
         $aliased_path = $original_path;
       }
