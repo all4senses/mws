@@ -699,11 +699,28 @@ function mws_commerce_preprocess_views_view_field(&$vars) {
   
   //dpr($vars['field']);
   //die;
-  dpm($vars['output']);
-  dpm($vars['row']);
-  dpm($vars['field']);
+  //dpm($vars['output']);
+  //dpm($vars['row']);
+  //dpm($vars['field']);
+  
+  
+          
+          
+          //|| ($nid = str_replace('node/', '', drupal_lookup_path('source', $_GET['l']))) ) {
+      
+    
   if ($vars['field']->field == 'line_item_title') {
-    $vars['output'] = '<div>' . $vars['row']->field_commerce_display_path[0]['rendered']['#markup'] . '</div>';
+    $original_path = $vars['row']->field_commerce_display_path[0]['rendered']['#markup'];
+    
+    if (is_numeric($aliased_path = str_replace('node/', '', $_GET['l']))) {
+      if (!$aliased_path = drupal_lookup_path('alias', $original_path)) {
+        $aliased_path = $original_path;
+      }
+    }
+    
+    //$vars['output'] = '<div>' . $vars['row']->field_commerce_display_path[0]['rendered']['#markup'] . '</div>';
+    $vars['output'] = l($vars['row']->original_value, 'mws/cart', array('query' => array('l' => $aliased_path)));
+    
   }
   //$vars['output'] = $vars['field']->advanced_render($vars['row']);
 }
