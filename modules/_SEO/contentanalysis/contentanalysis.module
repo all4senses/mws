@@ -869,8 +869,10 @@ function contentanalysis_parse_context_page($context, &$analysis) {
   $count = preg_match("|<meta[^>]*keywords[^>]*content=\"([^>]+)\"[^>]*>|Ui", $context['page'], $match);
   $context['meta_keywords'] =  $match[1];
   //$count = preg_match('/(<meta name=\"description\" content="(.*)" \/>)/i', $context['page'], $match); // value in $match [2]
-  $count = preg_match("|<meta[^>]*description[^>]*content=\"([^>]+)\"[^>]*>|Ui", $context['page'], $match);
-  $context['meta_description'] =  $match[1];
+  // a4s added if
+  if ($count = preg_match("|<meta[^>]*description[^>]*content=\"([^>]+)\"[^>]*>|Ui", $context['page'], $match)) {
+    $context['meta_description'] =  $match[1];
+  }
   $count = preg_match('/(<body.*>)(.+?)(<\/body>)/ismU', $context['page'], $match); 
   $context['body'] =  $match[2];
   $context['body_notags'] = strip_tags($context['body']);
