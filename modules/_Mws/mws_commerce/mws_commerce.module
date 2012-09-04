@@ -563,6 +563,10 @@ Again, going back to our restaurant analogy: In managed VoIP, the subscriber wou
 
     dsm($analyze);
   }
+  else {
+    dpm($context);
+    dpm($error_data);
+  }
   
   $out .= '<div>Test ends</div>';
   
