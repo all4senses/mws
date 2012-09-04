@@ -702,6 +702,9 @@ function mws_commerce_preprocess_views_view_field(&$vars) {
   dpm($vars['output']);
   dpm($vars['row']);
   dpm($vars['field']);
+  if ($vars['field']->field == 'line_item_title') {
+    $vars['output'] = '<div>' . $vars['row']->field_commerce_display_path[0]['rendered']['#markup'] . '</div>';
+  }
   //$vars['output'] = $vars['field']->advanced_render($vars['row']);
 }
 /*
