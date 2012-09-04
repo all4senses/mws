@@ -680,6 +680,16 @@ function mws_commerce_process_page(&$variables) {
 
 
 /**
+* Default theme function for all fields rows.
+*/
+function mws_commerce_preprocess_views_view_fields(&$vars) {
+  
+  dpm($vars);
+  
+}
+
+
+/**
  * Mws header: menu, links, cart info, etc.
  */
 function mws_commerce_mwsShowPageHeader() {
