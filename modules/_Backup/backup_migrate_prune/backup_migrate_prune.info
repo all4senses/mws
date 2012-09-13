@@ -1,0 +1,14 @@
+name = Backup and Migrate Prune
+description = "Prune your backup repository so it doesn't grow out of control."
+core = 7.x
+
+files[] = backup_migrate_prune.module
+; files[] = backup_migrate_prune.install
+
+dependencies[] = backup_migrate
+; Information added by drupal.org packaging script on 2012-03-22
+version = "7.x-1.0"
+core = "7.x"
+project = "backup_migrate_prune"
+datestamp = "1332444340"
+

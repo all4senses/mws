@@ -1,0 +1,60 @@
+<?php
+
+
+/**
+ * @file
+ * Install hooks for Backup and Migrate.
+ */
+
+
+/**
+ * Implementation of hook_requirements().
+ */
+function backup_migrate_prune_requirements($phase) {
+  $requirements = array();
+  return $requirements;
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function backup_migrate_prune_schema() {
+  $schema['backup_migrate_gardener'] = array(
+    'fields' => array(
+      'gardener_id' => array(
+        'type' => 'serial',
+        'description' => 'The primary identifier for a gardener.',
+      ),
+      'name' => array(
+        'description' => 'The name of the gardener.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE
+      ),
+      'settings' => array(
+        'description' => 'Settings for the gardener.',
+        'type' => 'text',
+        'not null' => TRUE,
+        'serialize' => TRUE,
+        'serialized default' => 'a:0:{}',
+     ),
+      'created' => array(
+        'description' => 'Creation timestamp.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'serialized default' => 'a:0:{}',
+		    'default' => 0,
+     ),
+  	 'destination_id' => array(
+  	    'type' => 'varchar',
+  	    'length' => 32,
+  	    'not null' => TRUE,
+  	    'default' => '0',
+  	    'description' => 'The primary identifier for a profile.',
+  	  ),
+    ),
+    'primary key' => array('gardener_id'),
+  );
+
+  return $schema;
+}

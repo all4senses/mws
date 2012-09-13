@@ -1,0 +1,439 @@
+<?php
+
+
+/**
+ * @file
+ * Create (manually or scheduled) and restore backups of your Drupal MySQL
+ * database with an option to exclude table data (e.g. cache_*)
+ */
+
+/* Drupal Hooks */
+
+/**
+ * Implementation of hook_help().
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function backup_migrate_prune_menu() {
+  $base_index = count(split('/', BACKUP_MIGRATE_MENU_PATH));
+  $items[BACKUP_MIGRATE_MENU_PATH . '/prune'] = array(
+    'title' => 'Prune',
+    'description' => 'Administer your gardeners (workers that prune your backups).',
+    'page callback' => 'backup_migrate_menu_callback',
+    'page arguments' => array('', 'backup_migrate_ui_manual_prune_list', TRUE),
+    'access arguments' => array('access backup and migrate'),
+    'type' => MENU_LOCAL_TASK,
+	'weight' => 5,
+  );
+  $items[BACKUP_MIGRATE_MENU_PATH . '/prune/list'] = array(
+    'title' => 'Prune',
+    'description' => 'Administer your gardeners (workers that prune your backups).',
+    'page callback' => 'backup_migrate_menu_callback',
+    'page arguments' => array('', 'backup_migrate_ui_manual_prune_list', TRUE),
+    'access arguments' => array('access backup and migrate'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+		'weight' => 5,
+  );
+  $items[BACKUP_MIGRATE_MENU_PATH . '/prune/add'] = array(
+    'title' => 'Add a gardener',
+    'description' => 'Administer your gardeners (workers that prune your backups).',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('backup_migrate_prune_add_form'),
+    'access arguments' => array('access backup and migrate'),
+    'type' => MENU_LOCAL_ACTION,
+		'weight' => 2,
+  );
+  // $items[BACKUP_MIGRATE_MENU_PATH . '/prune/list/%'] = array(
+  //   'title' => 'Prune',
+  //   'description' => 'Administer your gardeners (workers that prune your backups).',
+  //   'page callback' => 'backup_migrate_ui_manual_prune',
+  //   'page arguments' => array($base_index + 2),
+  //   'access arguments' => array('access backup and migrate'),
+  //   'type' => MENU_CALLBACK,
+  // 		'weight' => 2,
+  // );
+  $items[BACKUP_MIGRATE_MENU_PATH . '/prune/delete/%'] = array(
+    'title' => 'Delete',
+    'description' => 'Delete the gardener.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('backup_migrate_prune_delete_gardener', $base_index + 2),
+    'access arguments' => array('access backup and migrate'),
+    'type' => MENU_CALLBACK,
+  );
+  $items[BACKUP_MIGRATE_MENU_PATH . '/prune/prune/%'] = array(
+    'title' => 'Prune the destination',
+    'description' => 'Prune the destination.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('backup_migrate_prune_prune_form', $base_index + 2),
+    // 'page callback' => 'drupal_get_form',
+    // 'page arguments' => array('backup_migrate_prune_delete_gardener', $base_index + 2),
+    'access arguments' => array('access backup and migrate'),
+    'type' => MENU_CALLBACK,
+  );
+  // $items[BACKUP_MIGRATE_MENU_PATH . '/prune/prune/%'] = array(
+  //   'title' => 'Prune the destination',
+  //   'description' => 'Prune the destination.',
+  //   'page callback' => 'backup_migrate_prune_prune',
+  //   'page arguments' => array($base_index + 2),
+  //   // 'page callback' => 'drupal_get_form',
+  //   // 'page arguments' => array('backup_migrate_prune_delete_gardener', $base_index + 2),
+  //   'access arguments' => array('access backup and migrate'),
+  //   'type' => MENU_CALLBACK,
+  // );
+  return $items;
+}
+
+function backup_migrate_prune_add_form($form, $form_state) {
+	module_load_include('inc', 'backup_migrate', 'includes/destinations');
+	$form = array();
+	$form['name'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Name'),
+		'#description' => t('Enter a name describing your gardener.'),
+		'#required' => TRUE,
+	);
+	foreach (backup_migrate_get_destinations() as $key => $value) {
+		$options[$key] = $value->name;
+	}
+	$form['destination'] = array(
+		'#type' => 'select',
+		'#title' => t('Destination'),
+		'#description' => t('Select the destination to act upon.'),
+		'#options' => $options,
+		'#required' => TRUE,
+	);
+	
+	$form['settings'] = array(
+		'#type' => 'fieldset',
+		'#title' => t('Settings'),
+		'#tree' => TRUE,
+	);
+	
+	$form['settings']['lessthanday'] = array(
+		'#type' => 'fieldset',
+		'#title' => t('Less than a day'),
+		'#description' => t('Prune backups of days older than today leaving only a backup per day.'),
+		'#collapsible' => TRUE,
+		'#collapsed' => TRUE,
+		'#tree' => TRUE,
+	);
+	$form['settings']['lessthanday']['active'] = array(
+		'#type' => 'checkbox',
+		'#title' => t('Active'),
+		'#default_value' => TRUE,
+		'#disabled' => TRUE,
+	);
+	
+	$form['settings']['day'] = array(
+		'#type' => 'fieldset',
+		'#title' => t('Day'),
+		'#description' => t('Prune backups of days older than today leaving only a backup per week. It applies for past weeks.'),
+		'#collapsible' => TRUE,
+		'#collapsed' => FALSE,
+		'#tree' => TRUE,
+		'#states' => array(
+			'visible' => array(':input[name="settings[lessthanday][active]"]' => array('checked' => TRUE)),
+		),
+	);
+	$form['settings']['day']['active'] = array(
+		'#type' => 'checkbox',
+		'#title' => t('Active'),
+	);
+	$form['settings']['day']['keep'] = array(
+		'#type' => 'select',
+		'#options' => drupal_map_assoc(range(0, 6)),
+		'#title' => t('Keep'),
+		'#description' => t('Select the number of the day in the week you want to keep. 0 means Sunday, 5 means Friday. Just like the date PHP format.'),
+		'#states' => array(
+			'visible' => array(':input[name="settings[day][active]"]' => array('checked' => TRUE)),
+		),
+	);
+	
+	$form['settings']['week'] = array(
+		'#type' => 'fieldset',
+		'#title' => t('Week'),
+		'#description' => t('Prune backups of weeks older than this week leaving only a backup per month. It applies for past months.'),
+		'#collapsible' => TRUE,
+		'#collapsed' => FALSE,
+		'#tree' => TRUE,
+		'#states' => array(
+			'visible' => array(':input[name="settings[day][active]"]' => array('checked' => TRUE)),
+		),
+	);
+	$form['settings']['week']['active'] = array(
+		'#type' => 'checkbox',
+		'#title' => t('Active'),
+	);
+	$form['settings']['week']['keep'] = array(
+		'#type' => 'select',
+		'#options' => drupal_map_assoc(range(1, 4)),
+		'#title' => t('Keep'),
+		'#description' => t('Select the quarter of the month to keep. 1st, 2nd, 3rd or 4th week in the month.'),
+		'#states' => array(
+			'visible' => array(':input[name="settings[week][active]"]' => array('checked' => TRUE)),
+		),
+	);
+	
+	$form['settings']['month'] = array(
+		'#type' => 'fieldset',
+		'#title' => t('Month'),
+		'#description' => t('Prune backups of months older than this month leaving only a backup per year. It applies for past years.'),
+		'#collapsible' => TRUE,
+		'#collapsed' => FALSE,
+		'#tree' => TRUE,
+		'#states' => array(
+			'visible' => array(':input[name="settings[week][active]"]' => array('checked' => TRUE)),
+		),
+	);
+	$form['settings']['month']['active'] = array(
+		'#type' => 'checkbox',
+		'#title' => t('Active'),
+	);
+	$form['settings']['month']['keep'] = array(
+		'#type' => 'select',
+		'#options' => drupal_map_assoc(range(1, 12)),
+		'#title' => t('Keep'),
+		'#description' => t('Select the number of the month in the year you want to keep.'),
+		'#states' => array(
+			'visible' => array(':input[name="settings[month][active]"]' => array('checked' => TRUE)),
+		),
+	);
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => t('Save'),
+	);
+	$form['#submit'][] = 'backup_migrate_prune_menu_submit';
+	return $form;
+}
+
+function backup_migrate_prune_menu_submit($form, &$form_state) {
+	$form_state['redirect'] = array(BACKUP_MIGRATE_MENU_PATH . '/prune');
+	$nid = db_insert('backup_migrate_gardener')
+	  ->fields(array(
+	    'name' => $form_state['values']['name'],
+	    'settings' => serialize($form_state['values']['settings']),
+	    'created' => REQUEST_TIME,
+			'destination_id' => $form_state['values']['destination'],
+	  ))
+	  ->execute();
+}
+
+/**
+ * Page callback for the prune list
+ */
+function backup_migrate_ui_manual_prune_list() {
+	module_load_include('inc', 'backup_migrate', 'includes/destinations');
+	$query = db_select('backup_migrate_gardener', 'bmg')
+	    ->fields('bmg')
+	    ->execute();
+	$rows = array();
+	$days = array(
+		t('Sunday'),
+		t('Monday'),
+		t('Tuesday'),
+		t('Wednesday'),
+		t('Thursday'),
+		t('Friday'),
+		t('Saturday'),
+	);
+	while ($result = $query->fetchAssoc()) {
+		$result['settings'] = unserialize($result['settings']);
+		$rows[] = array(
+			'data' => array(
+				$result['name'],
+				backup_migrate_get_destination($result['destination_id'])->name,
+				$result['settings']['day']['active'] ? t('Yes'): t('No'),
+				$days[$result['settings']['day']['keep']],
+				$result['settings']['week']['active'] ? t('Yes'): t('No'),
+				$result['settings']['week']['keep'],
+				$result['settings']['month']['active'] ? t('Yes'): t('No'),
+				$result['settings']['month']['keep'],
+				format_date($result['created']),
+				theme('item_list', array('items' => array(
+					l(t('Delete'), BACKUP_MIGRATE_MENU_PATH . '/prune/delete/' . $result['gardener_id']),
+					l(t('Prune'), BACKUP_MIGRATE_MENU_PATH . '/prune/prune/' . $result['gardener_id']),
+					l(t('See files'), BACKUP_MIGRATE_MENU_PATH . '/destination/list/files/' . $result['destination_id']),
+				))),
+			),
+		);
+	}
+	$header = array(
+		t('Name'),
+		t('Destination'),
+		t('Active day?'),
+		t('Day of week to keep'),
+		t('Active week?'),
+		t('Quarter of month to keep'),
+		t('Active month?'),
+		t('Month in year to keep'),
+		t('Date created'),
+		t('Actions'),
+	);
+	return theme('table', array('header' => $header, 'rows' => $rows));
+}
+
+function backup_migrate_prune_delete_gardener($form, &$form_state, $gardener_id) {
+	$form['gardener_id'] = array(
+		'#type' => 'hidden',
+		'#value' => $gardener_id,
+	);
+	$form = confirm_form($form,	t('Are you sure you want to delete this gardener?'), BACKUP_MIGRATE_MENU_PATH . '/prune/list');
+	return $form;
+}
+
+function backup_migrate_prune_delete_gardener_submit($form, &$form_state) {
+	$form_state['redirect'] = array(BACKUP_MIGRATE_MENU_PATH . '/prune/list');
+	if (db_delete('backup_migrate_gardener')->condition('gardener_id', $form_state['values']['gardener_id'])->execute()) {
+		drupal_set_message(t('Your gardener has been deleted successfully.'));
+	}
+	else {
+		drupal_set_message(t('There was an error deleting your gardener'), 'error');
+	}
+	
+}
+
+
+/**
+ * Page callback for the prune action
+ */
+function backup_migrate_ui_manual_prune($index) {
+	return $index;
+}
+
+/**
+ * Form for Form API
+ */
+function backup_migrate_prune_prune_form($form, $form_state, $gardener_id) {
+  $question = t('Are you sure you want to prune the destination with the rules provided by gardener id: %gardener', array('%gardener' => $gardener_id));
+  $path = BACKUP_MIGRATE_MENU_PATH . '/prune';
+  $description = t('If you continue several backup files may be deleted. Proceed only if you are sure you want to delete old backups.');
+  $yes = t('Delete old backups');
+  $form = array(
+    'gardener_id' => array(
+      '#type' => 'hidden',
+      '#value' => $gardener_id,
+    )
+  );
+  $form['#action'] = url($path);
+  return confirm_form($form, $question, $path, $description, $yes);
+}
+
+/**
+ * Submit function for backup_migrate_prune_prune_form
+ */
+function backup_migrate_prune_prune_form_submit($form, &$form_state) {
+  backup_migrate_prune_prune($form_state['values']['gardener_id']);
+}
+
+/**
+ * Helper function to prune a destination
+ * @param $gardener_id
+ *   The id of the gardener
+ */
+function backup_migrate_prune_prune($gardener_id) {
+	module_load_include('inc', 'backup_migrate', 'includes/destinations');
+	$gardener = db_select('backup_migrate_gardener', 'bmg')->fields('bmg')->condition('gardener_id', $gardener_id)->execute()->fetchAssoc();
+	$gardener['settings'] = unserialize($gardener['settings']);
+	$destination = backup_migrate_get_destination($gardener['destination_id']);
+	if (!in_array('delete', $destination->supported_ops)) {
+		drupal_set_message('This destination cannot be prunned because deleting is not supported', 'error');
+		drupal_goto(BACKUP_MIGRATE_MENU_PATH . '/prune/list');
+	}
+	$files = backup_migrate_get_destination($gardener['destination_id'])->list_files();
+	
+	$prunned_files = 0;
+	$this_week = array(); // Save the ids for the files this week to prune them later.
+	
+	$now['seconds'] = time();
+	$now['day'] = floor($now['seconds'] / 86400);
+	$now['week'] = floor($now['day'] / 7);
+	$now['year'] = floor($now['day'] / 365);
+	$now['monthday'] = (int)date('j', $now['seconds']);
+	$now['weekday'] = (int)date('w', $now['seconds']);
+	$now['monthyear'] = (int)date('n', $now['seconds']);
+	$now['weekmonth'] = floor(($now['seconds'] - strtotime(date('m/01/Y', $now['seconds']))) / (86400 * 7));
+	$now['month'] = $now['year'] * 12 + $now['monthyear'];
+	foreach ($files as $name => $file) {
+		if ($file->file_info['filesize']) {
+			$date['seconds'] = $file->file_info['filetime'];
+			$date['day'] = floor($date['seconds'] / 86400);
+			$date['week'] = floor($date['day'] / 7);
+			$date['year'] = floor($date['day'] / 365);
+			$date['monthday'] = (int)date('j', $file->file_info['filetime']);
+			$date['weekday'] = (int)date('w', $file->file_info['filetime']);
+			$date['monthyear'] = (int)date('n', $file->file_info['filetime']);
+			
+			// Calculate weekmonth
+			$date['weekmonth'] = floor(($file->file_info['filetime'] - strtotime(date('m/01/Y', $file->file_info['filetime']))) / (86400 * 7));
+			$date['month'] = $date['year'] * 12 + $date['monthyear'];
+
+			if ($date['year'] == $now['year']) {
+				if ($date['month'] == $now['month']) {
+					if ($date['week'] == $now['week']) {
+						if ($date['day'] == $now['day']) {
+							// We don't prune backups from the same day.
+						}
+						elseif ($gardener['settings']['lessthanday']['active']) {
+							// Keep only one for day. Anyone should suffice.
+							if (!isset($this_week[$date['day']])) {
+								$this_week[$date['day']] = array();
+							}
+							$this_week[$date['day']][] = $file;
+						}
+					}
+					elseif ($gardener['settings']['day']['active']) {
+						// Keep only one for week. The one corresponding to the selected day of week.
+						if ($date['weekday'] != $gardener['settings']['day']['keep']) {
+							$destination->delete_file($file->file_id());
+							$prunned_files++;
+							continue;
+						}
+					}
+				}
+				elseif ($gardener['settings']['week']['active']) {
+					// Keep only one for month. The one corresponding to the selected week of the month.
+					// TODO: Calculate weekmonth
+					if ($date['weekmonth'] != $gardener['settings']['week']['keep']) {
+						$destination->delete_file($file->file_id());
+						$prunned_files++;
+						continue;
+					}
+				}
+			}
+			elseif ($gardener['settings']['month']['active']) {
+				// Keep only one for year. The one corresponding to the selected month
+				if ($date['monthyear'] != $gardener['settings']['month']['keep']) {
+					$destination->delete_file($file->file_id());
+					$prunned_files++;
+					continue;
+				}
+			}
+		}
+  }
+
+	foreach ($this_week as $day => $files) {
+		if (count($files) > 1) {
+			for ($i = 1; $i < count($files); $i++) { 
+				$file = $files[$i];
+				// $destination->delete_file($file->file_id());
+				$prunned_files++;
+				continue;
+			}
+		}
+	}
+	drupal_set_message(t('%num files prunned', array('%num' => $prunned_files)));
+}
+
+/**
+ * Implementation hook_cron().
+ */
+function backup_migrate_prune_cron() {
+	$query = db_select('backup_migrate_gardener', 'bmg')
+	    ->fields('bmg')
+	    ->execute();
+	while ($gardener = $query->fetchAssoc()) {
+		backup_migrate_prune_prune($gardener['gardener_id']);
+	}
+}
